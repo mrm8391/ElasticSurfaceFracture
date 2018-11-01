@@ -13,20 +13,72 @@ var camera, controls, scene, renderer;
 var plane;
 var planeParticles;
 var planeSprings;
+var planeLevels;
 
-initPhysics();
+var line;
+var linematerial;
+
+// constants
+var timeStep = 0.01;
+
+var paused = true;
+var startButton = document.getElementById( 'startButtonId' );
+startButton.onclick = function() {paused = !paused;}
+
+//initPhysics();
+initLine();
 initScene();
 animate();
 
+
+
+function initLine(){
+	line = new THREE.Geometry();
+
+	line.vertices.push(new THREE.Vector3(-10,10,0));
+	line.vertices.push(new THREE.Vector3(-20,0,0));
+	line.vertices.push(new THREE.Vector3(20,0,0));
+	line.vertices.push(new THREE.Vector3(10,10,0));
+
+	linematerial = new THREE.LineBasicMaterial({
+		color: 0x0000ff
+	});
+
+	planeParticles = [];
+	planeSprings = [];
+
+	let p1 = new Particle(line.vertices[0]),
+		p2 = new Particle(line.vertices[1]),
+		p3 = new Particle(line.vertices[2]);
+
+	let s = new Spring(p2,p3,20);
+
+	planeParticles.push(p2,p3);
+	planeSprings.push(s);
+	plane=line;
+}
+
+function initLineGeometry(){
+
+	var lineG = new THREE.Line( line, linematerial );
+	scene.add( lineG );
+}
+
 function initPhysics(){
-	plane = crossTesselatedPlane(25, 2);
+	planeLevels = 1;
+	plane = crossTesselatedPlane(40, planeLevels);
 
 	planeParticles = [];
 	planeSprings = [];
 
 	// Register each verticy as a particle.
 	for(let i = 0; i < plane.vertices.length; i++){
-		planeParticles.push(new Particle(plane.vertices[i]));
+		let p = new Particle(plane.vertices[i]);
+
+		// if(i >= plane.vertices.length - planeLevels -1)
+		// 	p.pin();
+
+		planeParticles.push(p);
 	}
 
 	// Create a spring for every edge. Use a set
@@ -50,9 +102,9 @@ function initPhysics(){
 			v2 = plane.faces[i].b,
 			v3 = plane.faces[i].c;
 
-		let p1 = plane.vertices[v1],
-			p2 = plane.vertices[v2],
-			p3 = plane.vertices[v3];
+		let p1 = planeParticles[v1],
+			p2 = planeParticles[v2],
+			p3 = planeParticles[v3];
 
 		let hash12 = cantorHash(v1,v2),
 			hash23 = cantorHash(v2,v3),
@@ -81,7 +133,7 @@ function initScene() {
 	// Camera and controls
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
 
-	camera.position.z = 50;
+	camera.position.z = 100;
 	controls = new THREE.TrackballControls( camera );
 	controls.rotateSpeed = 1.0;
 	controls.zoomSpeed = 1.2;
@@ -115,7 +167,11 @@ function initScene() {
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
 
-	initGeometry(plane);
+	if(line)
+		initLineGeometry();
+	else
+		initGeometry(plane);
+	
 
 	render();
 }
@@ -138,12 +194,16 @@ function onWindowResize() {
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	controls.handleResize();
-	render();
+	//render();
 }
 
 function animate() {
 	requestAnimationFrame( animate );
+	if(paused==true) return;
+
 	controls.update();
+	updatePhysics(planeParticles, planeSprings, plane);
+	renderer.render( scene, camera );
 }
 
 function render() {

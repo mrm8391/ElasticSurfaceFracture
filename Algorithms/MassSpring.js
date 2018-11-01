@@ -1,4 +1,46 @@
 
+function updatePhysics(particles, springs, geometry){
+
+	var i=0;
+	for(let s of springs){
+		let p1 = s.p1,
+			p2 = s.p2;
+
+		s.updateValues();
+
+		// Get spring force depending on spring displacement
+		let springForce = Spring.springConstant * (s.length - s.restingLength);
+		let springForceVec = s.unitVec.clone().multiplyScalar(springForce);
+
+
+		let dampConstant = 2;
+		// Dampen force
+		let p1dampen = p1.velocity.clone().multiplyScalar(dampConstant),
+		p2dampen = p2.velocity.clone().multiplyScalar(dampConstant);
+
+		let p1damped = springForceVec.clone().sub(p1dampen),
+		p2damped = springForceVec.clone().multiplyScalar(-1).sub(p2dampen);
+
+		// Multiply by unit vector in both directions
+		// to apply to the points on the spring.
+		let p1force = s.unitVec.clone().multiply(p1damped),
+			p2force = s.unitVec.clone().multiply(p2damped);
+
+		p1.applyForce(p1force);
+		p2.applyForce(p2force);
+
+		i++;
+	}
+
+	i=0;
+	for(let p of particles){
+		p.updatePosition(timeStep);
+		i++;
+	}
+
+	geometry.verticesNeedUpdate = true;
+}
+
 // Tessellate a plane with each verticy sharing an
 // edge with each of its 8 nearest neighbors (X pattern).
 function crossTesselatedPlane(width, levels){
