@@ -10,21 +10,28 @@ function updatePhysics(particles, springs, geometry){
 
 		// Get spring force depending on spring displacement
 		let springForce = Spring.springConstant * (s.length - s.restingLength);
+		// let springForceVec = new THREE.Vector3(
+		// 	Math.abs(s.unitVec.x) * springForce,
+		// 	Math.abs(s.unitVec.y) * springForce,
+		// 	Math.abs(s.unitVec.z) * springForce
+		// );
+
 		let springForceVec = s.unitVec.clone().multiplyScalar(springForce);
 
 
 		let dampConstant = 2;
-		// Dampen force
+
+		//turn off damping, if option toggled
+		if(dampingOff)
+			dampConstant = 0;
+
+		// Dampen vectors, bsed on each point's velocity
 		let p1dampen = p1.velocity.clone().multiplyScalar(dampConstant),
 		p2dampen = p2.velocity.clone().multiplyScalar(dampConstant);
 
-		let p1damped = springForceVec.clone().sub(p1dampen),
-		p2damped = springForceVec.clone().multiplyScalar(-1).sub(p2dampen);
-
-		// Multiply by unit vector in both directions
-		// to apply to the points on the spring.
-		let p1force = s.unitVec.clone().multiply(p1damped),
-			p2force = s.unitVec.clone().multiply(p2damped);
+		// Dampen force in each direction, then apply
+		let p1force = springForceVec.clone().sub(p1dampen),
+		p2force = springForceVec.clone().negate().sub(p2dampen);
 
 		p1.applyForce(p1force);
 		p2.applyForce(p2force);

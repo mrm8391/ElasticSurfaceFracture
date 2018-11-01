@@ -21,12 +21,15 @@ var linematerial;
 // constants
 var timeStep = 0.01;
 
+var dampingOff = false;
 var paused = true;
 var startButton = document.getElementById( 'startButtonId' );
 startButton.onclick = function() {paused = !paused;}
+var dampButton = document.getElementById( 'dampButtonId' );
+dampButton.onclick = function() {dampingOff = !dampingOff;}
 
-//initPhysics();
-initLine();
+initPhysics();
+//initLine();
 initScene();
 animate();
 
@@ -65,8 +68,8 @@ function initLineGeometry(){
 }
 
 function initPhysics(){
-	planeLevels = 1;
-	plane = crossTesselatedPlane(40, planeLevels);
+	planeLevels = 2;
+	plane = crossTesselatedPlane(80, planeLevels);
 
 	planeParticles = [];
 	planeSprings = [];
@@ -126,6 +129,10 @@ function initPhysics(){
 		}
 		
 	}
+
+	planeParticles[0].isfirst = true;
+	planeParticles[0].position.x -=10;
+	planeParticles[0].position.y -=10;
 }
 
 function initScene() {
