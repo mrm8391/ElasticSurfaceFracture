@@ -29,43 +29,8 @@ var dampButton = document.getElementById( 'dampButtonId' );
 dampButton.onclick = function() {dampingOff = !dampingOff;}
 
 initPhysics();
-//initLine();
 initScene();
 animate();
-
-
-
-function initLine(){
-	line = new THREE.Geometry();
-
-	line.vertices.push(new THREE.Vector3(-10,10,0));
-	line.vertices.push(new THREE.Vector3(-20,0,0));
-	line.vertices.push(new THREE.Vector3(20,0,0));
-	line.vertices.push(new THREE.Vector3(10,10,0));
-
-	linematerial = new THREE.LineBasicMaterial({
-		color: 0x0000ff
-	});
-
-	planeParticles = [];
-	planeSprings = [];
-
-	let p1 = new Particle(line.vertices[0]),
-		p2 = new Particle(line.vertices[1]),
-		p3 = new Particle(line.vertices[2]);
-
-	let s = new Spring(p2,p3,20);
-
-	planeParticles.push(p2,p3);
-	planeSprings.push(s);
-	plane=line;
-}
-
-function initLineGeometry(){
-
-	var lineG = new THREE.Line( line, linematerial );
-	scene.add( lineG );
-}
 
 function initPhysics(){
 	planeLevels = 2;
@@ -174,10 +139,7 @@ function initScene() {
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
 
-	if(line)
-		initLineGeometry();
-	else
-		initGeometry(plane);
+	initGeometry(plane);
 	
 
 	render();
