@@ -11,8 +11,25 @@ class Particle{
 		this.pinned = false;
 	}
 
-	pin(){
+	/*
+	Pin this particle, preventing it from moving due to force/velocity.
+
+	@param at Optional parameter to pin the particle at a specific location.
+	          Particle remains at its current spot if not specified.
+	*/
+	pin(at = null){
 		this.pinned = true;
+
+		if(at != null){
+			this.position.set(at.x,at.y,at.z);
+		}
+	}
+
+	/*
+	Allow this particle to move again.
+	*/
+	unpin(){
+		this.pinned = false;
 	}
 
 	applyForce(f){
@@ -26,6 +43,7 @@ class Particle{
 		let dv = this.force.clone();
 		dv.multiplyScalar(dt);
 		dv.divideScalar(this.mass);
+
 
 		this.velocity.add(dv);
 

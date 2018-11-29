@@ -15,8 +15,12 @@ var planeParticles;
 var planeSprings;
 var planeLevels;
 
-var line;
-var linematerial;
+// the object pushing into the plane, and associated data
+var objectGeometry;
+var objectBottom; //location of lowest point in object. for use with cube object
+var objectDescendRate = 1; //speed, in pixels, that the object descends
+var objectStopPoint = -30;
+var possibleCollisions; //points on the plane that can collide with object
 
 // constants
 var timeStep = 0.01;
@@ -43,6 +47,21 @@ function initPhysics(){
 	// Register each verticy as a particle.
 	for(let i = 0; i < plane.vertices.length; i++){
 		let p = new Particle(plane.vertices[i]);
+
+		//Hackish code to pin points on edge of plane. There are
+		//2n+1 columns per "row" including cross points, but n+1 cols for a row
+		//of box points.
+		//so check if current verticy is at top row, bottom row, or left/right column.
+		
+		let colModulus = (2*planeLevels) + 1; //Modulus using this yields current column in array
+		if(
+			(i <= planeLevels) //Bot row
+			|| ((plane.vertices.length - i - 1) < planeLevels) //top row, see if in last n points
+			|| (i % colModulus == 0) //Left column
+			|| (i % colModulus == planeLevels) //Right column
+		){
+			p.pin();
+		}
 
 		// if(i >= plane.vertices.length - planeLevels -1)
 		// 	p.pin();
@@ -96,9 +115,10 @@ function initPhysics(){
 		
 	}
 
-	planeParticles[0].isfirst = true;
-	planeParticles[0].position.x -=10;
-	planeParticles[0].position.y -=10;
+	//planeParticles[0].isfirst = true;
+	//planeParticles[0].position.x -=10;
+	//planeParticles[0].position.y -=5;
+	//planeParticles[0].position.x -=15;
 }
 
 function initScene() {
@@ -168,7 +188,25 @@ function initGeometry(){
 
 	
 }
+
 function initCubeObject(size,startHeight=20){
+
+	// First, determine points on plane that can potentially
+	// collide with cube. Rubber plane starts at z = 0, so create
+	// bounding box around plane and find collisions.
+	let bound = size/2;
+	let boundingBox = new THREE.Box3(
+		new THREE.Vector3((-1)*bound,(-1)*bound,-1),
+		new THREE.Vector3(bound,bound,1)
+	);
+
+	let collisions = [];
+	for(let p of planeParticles){
+		if(boundingBox.containsPoint(p.position))
+			collisions.push(p);
+	}
+
+	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
 		color: 0x000000, flatShading: true
 	});
@@ -177,6 +215,10 @@ function initCubeObject(size,startHeight=20){
 	objectGeometry.translate(0,0,startHeight);
 	var objectMesh = new THREE.Mesh(objectGeometry, objectMaterial);
 	scene.add(objectMesh);
+
+	// set globals, for use later
+	possibleCollisions = collisions;
+	objectBottom = startHeight - bound;
 }
 
 function onWindowResize() {
@@ -192,6 +234,7 @@ function animate() {
 	if(paused==true) return;
 
 	controls.update();
+	updateObject();
 	updatePhysics(planeParticles, planeSprings, plane);
 	renderer.render( scene, camera );
 }

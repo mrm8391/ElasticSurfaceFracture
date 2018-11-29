@@ -1,5 +1,5 @@
 
-function updatePhysics(particles, springs, geometry){
+function updatePhysics(particles, springs, planeGeometry){
 
 	var i=0;
 	for(let s of springs){
@@ -19,7 +19,7 @@ function updatePhysics(particles, springs, geometry){
 		let springForceVec = s.unitVec.clone().multiplyScalar(springForce);
 
 
-		let dampConstant = 2;
+		let dampConstant = .3;
 
 		//turn off damping, if option toggled
 		if(dampingOff)
@@ -45,7 +45,36 @@ function updatePhysics(particles, springs, geometry){
 		i++;
 	}
 
-	geometry.verticesNeedUpdate = true;
+	planeGeometry.verticesNeedUpdate = true;
+}
+
+function updateObject(){
+
+	//If stopping point designated and reached, don't update position.
+	if(objectStopPoint != null && objectBottom <= objectStopPoint)
+		return;
+
+	//Shift object down	
+	objectGeometry.translate(0,0,(-1)*objectDescendRate);
+	objectBottom -= (objectDescendRate);
+
+	//Handle particles colliding with object. With simplified cube object,
+	//we know there is a collision if cube bottom is below position 0
+	//on z-axis.
+	if(objectBottom <= 0){
+		//Stick particle to bottom of object by pinning it there.
+		for(let p of possibleCollisions){
+			p.position.z = objectBottom;
+			p.pin();
+		}
+	}
+
+	//If object not colliding with plane, unpin points
+	else{
+		for(let p of possibleCollisions){
+			p.unpin();
+		}
+	}
 }
 
 // Tessellate a plane with each verticy sharing an
