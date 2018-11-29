@@ -33,8 +33,9 @@ initScene();
 animate();
 
 function initPhysics(){
-	planeLevels = 2;
-	plane = crossTesselatedPlane(80, planeLevels);
+	//planeLevels = 2;
+	planeLevels = 5;
+	plane = crossTesselatedPlane(50, planeLevels);
 
 	planeParticles = [];
 	planeSprings = [];
@@ -104,8 +105,15 @@ function initScene() {
 
 	// Camera and controls
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
+	
+	
+	camera.up = new THREE.Vector3(0,-10,100);
+	camera.position.y = -100;
+	camera.position.z = 10;
 
-	camera.position.z = 100;
+	camera.lookAt(new THREE.Vector3(0,0,0));
+
+	
 	controls = new THREE.TrackballControls( camera );
 	controls.rotateSpeed = 1.0;
 	controls.zoomSpeed = 1.2;
@@ -139,23 +147,36 @@ function initScene() {
 	//
 	window.addEventListener( 'resize', onWindowResize, false );
 
-	initGeometry(plane);
+	initGeometry();
+	initCubeObject(10, 20);
 	
 
 	render();
 }
 
-function initGeometry(geometry){
+function initGeometry(){
 	
-	var material = new THREE.MeshPhongMaterial( { 
+	var planeMaterial = new THREE.MeshPhongMaterial( { 
 		color: 0xff00ff, flatShading: true, wireframe: true
 	} );
 
-	var mesh = new THREE.Mesh( geometry, material );
-	mesh.position = new THREE.Vector3(0,0,0);
-	mesh.updateMatrix();
-	mesh.matrixAutoUpdate = false;
-	scene.add( mesh );
+	var planeMesh = new THREE.Mesh( plane, planeMaterial );
+	planeMesh.position = new THREE.Vector3(0,0,0);
+	planeMesh.updateMatrix();
+	planeMesh.matrixAutoUpdate = false;
+	scene.add( planeMesh );
+
+	
+}
+function initCubeObject(size,startHeight=20){
+	var objectMaterial = new THREE.MeshPhongMaterial( {
+		color: 0x000000, flatShading: true
+	});
+
+	objectGeometry = new THREE.BoxGeometry(size,size,size);
+	objectGeometry.translate(0,0,startHeight);
+	var objectMesh = new THREE.Mesh(objectGeometry, objectMaterial);
+	scene.add(objectMesh);
 }
 
 function onWindowResize() {
