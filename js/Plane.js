@@ -1,3 +1,6 @@
+/*
+Create and manipulate a custom tessellated plane object.
+*/
 
 var Plane = {
 

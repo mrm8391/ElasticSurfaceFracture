@@ -1,3 +1,6 @@
+/*
+Miscellaneous utility functions.
+*/
 
 var Utils = {
 	//https://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function

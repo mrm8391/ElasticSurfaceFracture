@@ -1,3 +1,6 @@
+/*
+Definition of constants that alter simulation.
+*/
 
 var CONF = {
 

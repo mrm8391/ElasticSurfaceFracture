@@ -1,3 +1,6 @@
+/*
+Update physics and objects in simulation.
+*/
 
 var Update = {
 

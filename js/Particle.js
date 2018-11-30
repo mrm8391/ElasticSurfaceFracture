@@ -1,3 +1,10 @@
+/*
+Wrapper around a ThreeJS vertex for the Mass-Spring model.
+
+Contains information needed to move the vertex in response to
+spring energy.
+*/
+
 class Particle{
 
 	constructor(verticy){

@@ -1,6 +1,8 @@
-// Used and modified from
-// https://github.com/mrdoob/three.js/blob/master/examples/misc_controls_trackball.html
+/*
+Entry point of simulation.
 
+Defines globals, initializes simulation, and starts render loop.
+*/
 
 if ( WEBGL.isWebGLAvailable() === false ) {
 	document.body.appendChild( WEBGL.getWebGLErrorMessage() );

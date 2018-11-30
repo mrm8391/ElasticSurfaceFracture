@@ -1,3 +1,9 @@
+/*
+Simulates spring interaction for an edge between two vertices.
+
+Logic manipulating spring objects is contained in Update.js.
+*/
+
 class Spring{
 
 	static get springLength(){return 20;}
