@@ -10,115 +10,102 @@ if ( WEBGL.isWebGLAvailable() === false ) {
 var camera, controls, scene, renderer;
 
 // the rubber plane, and its properties
-var plane;
+var planeGeometry;
 var planeParticles;
 var planeSprings;
-var planeLevels;
 
 // the object pushing into the plane, and associated data
 var objectGeometry;
 var objectBottom; //location of lowest point in object. for use with cube object
-var objectDescendRate = 1; //speed, in pixels, that the object descends
-var objectStopPoint = -30;
 var possibleCollisions; //points on the plane that can collide with object
 
-// constants
-var timeStep = 0.01;
+// Configuration constants
+paused = CONF.startPaused;
 
-var dampingOff = false;
-var paused = true;
+
 var startButton = document.getElementById( 'startButtonId' );
 startButton.onclick = function() {paused = !paused;}
 var dampButton = document.getElementById( 'dampButtonId' );
-dampButton.onclick = function() {dampingOff = !dampingOff;}
+dampButton.onclick = function() {CONF.dampingOff = !CONF.dampingOff;}
 
-initPhysics();
+initPlane();
 initScene();
 animate();
 
-function initPhysics(){
-	//planeLevels = 2;
-	planeLevels = 5;
-	plane = crossTesselatedPlane(50, planeLevels);
+function initPlane(){
+	let plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
+	let particles = [];
+	let springs = [];
 
-	planeParticles = [];
-	planeSprings = [];
+	// Current design involves a primitive cube as the object.
+	// Create bounding box to determine particles that
+	// can collide with the cube.
+	let collisions = [];
+	let bound = CONF.cubeWidth/2;
+	let boundingBox = new THREE.Box3(
+		new THREE.Vector3((-1)*bound,(-1)*bound,-1),
+		new THREE.Vector3(bound,bound,1)
+	);
 
 	// Register each verticy as a particle.
 	for(let i = 0; i < plane.vertices.length; i++){
 		let p = new Particle(plane.vertices[i]);
 
-		//Hackish code to pin points on edge of plane. There are
-		//2n+1 columns per "row" including cross points, but n+1 cols for a row
-		//of box points.
-		//so check if current verticy is at top row, bottom row, or left/right column.
-		
-		let colModulus = (2*planeLevels) + 1; //Modulus using this yields current column in array
-		if(
-			(i <= planeLevels) //Bot row
-			|| ((plane.vertices.length - i - 1) < planeLevels) //top row, see if in last n points
-			|| (i % colModulus == 0) //Left column
-			|| (i % colModulus == planeLevels) //Right column
-		){
+		//Pin verticy if it is on the edge of the plane, to
+		//prevent plane from moving.
+		if(Plane.isPointOnEdgeOfPlane(i,CONF.planeLevels))
 			p.pin();
-		}
 
-		// if(i >= plane.vertices.length - planeLevels -1)
-		// 	p.pin();
+		//Check if particle will collide with cube
+		if(boundingBox.containsPoint(p.position))
+			collisions.push(p);
 
-		planeParticles.push(p);
+		particles.push(p);
 	}
 
-	// Create a spring for every edge. Use a set
-	// and hash each pair to ensure no duplicates are added.
+	// Create a spring for every edge. 
+	// Hash each pair to ensure no duplicates are added.
 	let addedPairs = new Set();
-
-	//https://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function
-	let cantorHash = function(v1,v2){
-		// Sort to account for either order of points
-		if(v1 >= v2){
-			let temp = v1;
-			v1 = v2;
-			v2 = temp;
-		}
-
-		return 0.5 * (v1 + v2) * (v1 + v2 + 1) + v2;
-	}
 
 	for(let i = 0; i < plane.faces.length; i++){
 		let v1 = plane.faces[i].a,
 			v2 = plane.faces[i].b,
 			v3 = plane.faces[i].c;
 
-		let p1 = planeParticles[v1],
-			p2 = planeParticles[v2],
-			p3 = planeParticles[v3];
+		let p1 = particles[v1],
+			p2 = particles[v2],
+			p3 = particles[v3];
 
-		let hash12 = cantorHash(v1,v2),
-			hash23 = cantorHash(v2,v3),
-			hash31 = cantorHash(v3,v1);
+		let hash12 = Utils.cantorHash(v1,v2),
+			hash23 = Utils.cantorHash(v2,v3),
+			hash31 = Utils.cantorHash(v3,v1);
 
 		if(!addedPairs.has(hash12)){
-			planeSprings.push(new Spring(p1,p2));
+			springs.push(new Spring(p1,p2));
 			addedPairs.add(hash12);
 		}
 
 		if(!addedPairs.has(hash23)){
-			planeSprings.push(new Spring(p2,p3));
+			springs.push(new Spring(p2,p3));
 			addedPairs.add(hash23);
 		}
 
 		if(!addedPairs.has(hash31)){
-			planeSprings.push(new Spring(p3,p1));
+			springs.push(new Spring(p3,p1));
 			addedPairs.add(hash31);
 		}
 		
 	}
 
-	//planeParticles[0].isfirst = true;
-	//planeParticles[0].position.x -=10;
-	//planeParticles[0].position.y -=5;
-	//planeParticles[0].position.x -=15;
+	//set globals
+	planeGeometry = plane;
+	planeParticles = particles;
+	planeSprings = springs;
+	possibleCollisions = collisions;
+
+	//particles[0].position.x -=10;
+	//particles[0].position.y -=5;
+	//particles[0].position.x -=15;
 }
 
 function initScene() {
@@ -126,13 +113,11 @@ function initScene() {
 	// Camera and controls
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
 	
-	
 	camera.up = new THREE.Vector3(0,-10,100);
 	camera.position.y = -100;
 	camera.position.z = 10;
 
 	camera.lookAt(new THREE.Vector3(0,0,0));
-
 	
 	controls = new THREE.TrackballControls( camera );
 	controls.rotateSpeed = 1.0;
@@ -180,7 +165,7 @@ function initGeometry(){
 		color: 0xff00ff, flatShading: true, wireframe: true
 	} );
 
-	var planeMesh = new THREE.Mesh( plane, planeMaterial );
+	var planeMesh = new THREE.Mesh( planeGeometry, planeMaterial );
 	planeMesh.position = new THREE.Vector3(0,0,0);
 	planeMesh.updateMatrix();
 	planeMesh.matrixAutoUpdate = false;
@@ -189,36 +174,21 @@ function initGeometry(){
 	
 }
 
-function initCubeObject(size,startHeight=20){
-
-	// First, determine points on plane that can potentially
-	// collide with cube. Rubber plane starts at z = 0, so create
-	// bounding box around plane and find collisions.
-	let bound = size/2;
-	let boundingBox = new THREE.Box3(
-		new THREE.Vector3((-1)*bound,(-1)*bound,-1),
-		new THREE.Vector3(bound,bound,1)
-	);
-
-	let collisions = [];
-	for(let p of planeParticles){
-		if(boundingBox.containsPoint(p.position))
-			collisions.push(p);
-	}
+function initCubeObject(){
 
 	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
 		color: 0x000000, flatShading: true
 	});
 
-	objectGeometry = new THREE.BoxGeometry(size,size,size);
-	objectGeometry.translate(0,0,startHeight);
-	var objectMesh = new THREE.Mesh(objectGeometry, objectMaterial);
+	let geometry = new THREE.BoxGeometry(CONF.cubeWidth,CONF.cubeWidth,CONF.cubeWidth);
+	geometry.translate(0,0,CONF.cubeStartHeight);
+	var objectMesh = new THREE.Mesh(geometry, objectMaterial);
 	scene.add(objectMesh);
 
-	// set globals, for use later
-	possibleCollisions = collisions;
-	objectBottom = startHeight - bound;
+	// set globals
+	objectBottom = CONF.cubeStartHeight - (CONF.cubeWidth / 2);
+	objectGeometry = geometry;
 }
 
 function onWindowResize() {
@@ -234,8 +204,8 @@ function animate() {
 	if(paused==true) return;
 
 	controls.update();
-	updateObject();
-	updatePhysics(planeParticles, planeSprings, plane);
+	Update.updateObject();
+	Update.updatePhysics(planeParticles, planeSprings, planeGeometry);
 	renderer.render( scene, camera );
 }
 

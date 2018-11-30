@@ -1,7 +1,6 @@
 class Spring{
 
 	static get springLength(){return 20;}
-	static get springConstant(){return .5;}
 
 	// l = spring resting length. If zero, resting length computed from
 	// point positions

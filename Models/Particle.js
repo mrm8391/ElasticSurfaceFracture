@@ -1,9 +1,6 @@
 class Particle{
 
-	static get PIXELS_PER_METER() {return 50;}
-
 	constructor(verticy){
-
 		this.position = verticy;
 		this.velocity = new THREE.Vector3();
 		this.mass = 1.0;
@@ -49,7 +46,7 @@ class Particle{
 
 		// Change in position
 		let dX = this.velocity.clone();
-		dX.multiplyScalar(Particle.PIXELS_PER_METER);
+		dX.multiplyScalar(CONF.pixelsPerMeter);
 		dX.multiplyScalar(dt);
 
 		this.position.add(dX);
