@@ -18,8 +18,11 @@ var planeSprings;
 
 // the object pushing into the plane, and associated data
 var objectGeometry;
-var objectBottom; //location of lowest point in object. for use with cube object
+var objectBoundingBox; //bounding box for testing collisions
+var objectSideFaces; //planes for each side of cube (excluding top)
+var objectBottom; //plane associated with bottom of cube object
 var possibleCollisions; //points on the plane that can collide with object
+var currentCollisions; //points on the plane that are currently colliding (NOT USED YET)
 
 // Configuration constants
 paused = CONF.startPaused;
@@ -83,17 +86,26 @@ function initPlane(){
 			hash31 = Utils.cantorHash(v3,v1);
 
 		if(!addedPairs.has(hash12)){
-			springs.push(new Spring(p1,p2));
+			let s = new Spring(p1,p2);
+			springs.push(s);
+			p1.addSpring(s);
+			p2.addSpring(s);
 			addedPairs.add(hash12);
 		}
 
 		if(!addedPairs.has(hash23)){
-			springs.push(new Spring(p2,p3));
+			let s = new Spring(p2,p3);
+			springs.push(s);
+			p1.addSpring(s);
+			p2.addSpring(s);
 			addedPairs.add(hash23);
 		}
 
 		if(!addedPairs.has(hash31)){
-			springs.push(new Spring(p3,p1));
+			let s = new Spring(p3,p1);
+			springs.push(s);
+			p1.addSpring(s);
+			p2.addSpring(s);
 			addedPairs.add(hash31);
 		}
 		
@@ -104,6 +116,7 @@ function initPlane(){
 	planeParticles = particles;
 	planeSprings = springs;
 	possibleCollisions = collisions;
+	currentCollisions = [];
 
 	//particles[0].position.x -=10;
 	//particles[0].position.y -=5;
@@ -115,9 +128,15 @@ function initScene() {
 	// Camera and controls
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
 	
-	camera.up = new THREE.Vector3(0,-10,100);
-	camera.position.y = -100;
-	camera.position.z = 10;
+	if(!CONF.cameraBottomView){
+		camera.up = new THREE.Vector3(0,-10,100);
+		camera.position.y = -100;
+		camera.position.z = 10;
+	}else{
+		camera.up = new THREE.Vector3(0,-1,0);
+		camera.position.y = 0.5;
+		camera.position.z = -75;
+	}
 
 	camera.lookAt(new THREE.Vector3(0,0,0));
 	
@@ -178,19 +197,39 @@ function initGeometry(){
 
 function initCubeObject(){
 
+	//Create global bounding box that moves with cube, to
+	//actively test for collisions.
+	let bound = CONF.cubeWidth/2;
+	let cubeTranslation = new THREE.Vector3(0,0,CONF.cubeStartHeight);
+	let boundingBox = new THREE.Box3(
+		new THREE.Vector3((-1)*bound,(-1)*bound,(-1)*bound - 1),
+		new THREE.Vector3(bound,bound,bound)
+	);
+	boundingBox.translate(cubeTranslation);
+
+	//Create planes for collision with sides of cube.
+	let leftF = new THREE.Plane(new THREE.Vector3(-1,0,0), (-1)*bound);
+	let rightF = new THREE.Plane(new THREE.Vector3(1,0,0), bound);
+	let frontF = new THREE.Plane(new THREE.Vector3(0,-1,0), (-1)*bound);
+	let backF = new THREE.Plane(new THREE.Vector3(0,1,0), bound);
+	let bottomF = new THREE.Plane(new THREE.Vector3(0,0,-1), (-1)*bound);
+	bottomF.translate(cubeTranslation);
+
 	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
 		color: 0x000000, flatShading: true
 	});
 
 	let geometry = new THREE.BoxGeometry(CONF.cubeWidth,CONF.cubeWidth,CONF.cubeWidth);
-	geometry.translate(0,0,CONF.cubeStartHeight);
+	geometry.translate(cubeTranslation.x,cubeTranslation.y,cubeTranslation.z);
 	var objectMesh = new THREE.Mesh(geometry, objectMaterial);
 	scene.add(objectMesh);
 
 	// set globals
-	objectBottom = CONF.cubeStartHeight - (CONF.cubeWidth / 2);
 	objectGeometry = geometry;
+	objectBoundingBox = boundingBox;
+	objectSideFaces = [leftF,backF,rightF,frontF,bottomF];
+	objectBottom = bottomF;
 }
 
 function onWindowResize() {
@@ -207,7 +246,7 @@ function animate() {
 
 	controls.update();
 	Update.updateObject();
-	Update.updatePhysics(planeParticles, planeSprings, planeGeometry);
+	Update.updatePhysics();
 	renderer.render( scene, camera );
 }
 

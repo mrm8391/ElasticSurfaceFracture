@@ -49,29 +49,44 @@ var Update = {
 
 	updateObject(){
 
-		//If stopping point designated and reached, don't update position.
-		if(CONF.objectStopPoint != null && objectBottom <= CONF.objectStopPoint)
-			return;
-
-		//Shift object down	
-		objectGeometry.translate(0,0,(-1)*CONF.objectDescendRate);
-		objectBottom -= (CONF.objectDescendRate);
+		//Shift object down, if stopping point not reached.
+		if(objectBottom.constant > CONF.objectStopPoint){
+			let moveVector = new THREE.Vector3(0,0,(-1)*CONF.objectDescendRate);
+			objectGeometry.translate(moveVector.x,moveVector.y,moveVector.z);
+			objectBoundingBox.translate(moveVector);
+			objectBottom.translate(moveVector);
+		}
 
 		//Handle particles colliding with object. With simplified cube object,
 		//we know there is a collision if cube bottom is below position 0
 		//on z-axis.
-		if(objectBottom <= 0){
-			//Stick particle to bottom of object by pinning it there.
+		if(objectBottom.constant <= 0){
 			for(let p of possibleCollisions){
-				p.position.z = objectBottom;
-				p.pin();
+
+				//If object collides with point, lock its z coordinate to the object's bottom.
+				//This allows points to "slide" along bottom of cube, but prevents clipping with cube.
+				//Ignore points that are pinned by other means.
+				if(objectBoundingBox.containsPoint(p.position) && !p.pinned){
+					p.position.z = objectBottom.constant;
+					p.zLock();
+				}else if(p.checkNeighborsZLocked() && !p.pinned){
+					p.position.z = objectBottom.constant;
+					p.softZLock();
+					p.zUnlock();
+				}
+				else{
+					p.zUnlock();
+					p.softZUnlock();
+				}
+				
 			}
 		}
 
-		//If object not colliding with plane, unpin points
+		//If object not colliding with plane at all, unpin all points
 		else{
 			for(let p of possibleCollisions){
-				p.unpin();
+				p.zUnlock();
+				p.softZUnlock();
 			}
 		}
 	}

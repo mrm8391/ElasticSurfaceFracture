@@ -9,22 +9,23 @@ var CONF = {
 	//
 	timeStep: 0.01, //time that passes each frame of animation. Used to update particle positions
 	dampingOff: false, //true to disable damping of spring energy
-	dampConstant: .3, //how heavily to damp spring energy
-	springConstant: .5,
+	dampConstant: .75, //how heavily to damp spring energy
+	springConstant: 2.0,
 	pixelsPerMeter: 50,
 
 	//
 	//Plane and object properties
 	//
-	planeLevels: 5, //How many levels the plane is tesselated to
+	planeLevels: 50, //How many levels the plane is tesselated to
 	planeWidth: 50, //width of the plane in pixels
-	objectDescendRate: 1, //speed, in pixels, that the object descends
-	objectStopPoint: -30, //Where to stop object movement. null indicates no stop
+	objectDescendRate: 0.25, //speed, in pixels, that the object descends
+	objectStopPoint: -50, //Where to stop object movement. null indicates no stop
 	cubeWidth: 10,
 	cubeStartHeight: 20,
 	
 	//
 	//Misc
 	//
-	startPaused: true
+	startPaused: true,
+	cameraBottomView: true //set camera view to be below the plane
 }

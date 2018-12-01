@@ -6,6 +6,8 @@ Logic manipulating spring objects is contained in Update.js.
 
 class Spring{
 
+	// Static ID variable after class declaration
+
 	static get springLength(){return 20;}
 
 	// l = spring resting length. If zero, resting length computed from
@@ -20,6 +22,9 @@ class Spring{
 	    	this.restingLength = p1.position.distanceTo(p2.position);
 	    this.pointVec = new THREE.Vector3();
 	    this.unitVec = new THREE.Vector3();
+
+	    this.id = Spring.nextId;
+		Spring.nextId++;
 	}
 
 	updateValues(){
@@ -28,3 +33,5 @@ class Spring{
 		this.unitVec = this.pointVec.clone().divideScalar(this.length);
 	}
 }
+
+Spring.nextId = 0;

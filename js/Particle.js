@@ -7,12 +7,33 @@ spring energy.
 
 class Particle{
 
+	// Static ID variable after class declaration
+
 	constructor(verticy){
 		this.position = verticy;
 		this.velocity = new THREE.Vector3();
 		this.mass = 1.0;
 		this.force = new THREE.Vector3(0,0,0);
 		this.pinned = false;
+		this.zLocked = false;
+		this.softZLocked = false;
+		this.springs = new Set();
+
+		this.id = Particle.nextId;
+		Particle.nextId++;
+	}
+
+	addSpring(s){
+		this.springs.add(s);
+	}
+
+	checkNeighborsZLocked(){
+		for(let s of this.springs){
+			if(s.p1.zLocked || s.p2.zLocked)
+				return true;1
+		}
+
+		return false;
 	}
 
 	/*
@@ -36,12 +57,34 @@ class Particle{
 		this.pinned = false;
 	}
 
+	/*
+	Prevent particle from moving along Z-axis.
+
+	Intended for use for particles colliding with bottom of an object, to
+	prevent particle from moving vertically.
+	*/
+	zLock(){
+		this.zLocked = true;
+	}
+
+	zUnlock(){
+		this.zLocked = false;
+	}
+
+	softZLock(){
+		this.softZLocked = true;
+	}
+
+	softZUnlock(){
+		this.softZLocked = false;
+	}
+
 	applyForce(f){
 		this.force.add(f);
 	}
 
 	updatePosition(dt){
-		if(this.pinned == true) return;
+		if(this.pinned) return;
 
 		// Change in velocity
 		let dv = this.force.clone();
@@ -56,8 +99,47 @@ class Particle{
 		dX.multiplyScalar(CONF.pixelsPerMeter);
 		dX.multiplyScalar(dt);
 
+		//Disable z movement if particle colliding with object.
+		//In addition, if a neighbor is zlocked, cancel z movement
+		//to prevent clipping with the cube.
+		if(this.zLocked || this.softZLocked)
+			dX.set(dX.x,dX.y,0);
+
+		// Test for and handle collision with object.
+		let newPos = new THREE.Vector3();
+		newPos.addVectors(this.position, dX);
+
+		if(objectBoundingBox.containsPoint(newPos)){
+			//Collision detected. This implies that the point is moving
+			//from a non-colliding position to a colliding one.
+			//To handle this, cancel out movement in the axis that
+			//is pushing the point into the cube.
+			let transLine = new THREE.Line3(this.position, newPos);
+
+			for(let face of objectSideFaces){
+				//Bingo, found the intersected side
+				if(face.intersectsLine(transLine)){
+					//Now, negate movement into this axis
+					if(face.normal.x != 0)
+						dX.set(0,dX.y,dX.z);
+					else if(face.normal.y != 0)
+						dX.set(dX.x,0,dX.z);
+					else{
+						//Do nothing. Bottom face collision handled
+						//by object update function
+						dX.set(dX.x,dX.y,0);
+					}
+
+					//No need to check other faces.
+					break;
+				}
+			}
+		}
+
 		this.position.add(dX);
 
 		this.force = new THREE.Vector3(0,0,0);
 	}
 }
+
+Particle.nextId = 0;
