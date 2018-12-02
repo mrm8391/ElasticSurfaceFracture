@@ -102,8 +102,12 @@ class Particle{
 		//Disable z movement if particle colliding with object.
 		//In addition, if a neighbor is zlocked, cancel z movement
 		//to prevent clipping with the cube.
-		if(this.zLocked || this.softZLocked)
+		if(this.zLocked || this.softZLocked){
+			let dxLength = dX.length();
+			dX.normalize();
 			dX.set(dX.x,dX.y,0);
+			dX.multiplyScalar(dxLength);
+		}
 
 		// Test for and handle collision with object.
 		let newPos = new THREE.Vector3();
@@ -119,16 +123,22 @@ class Particle{
 			for(let face of objectSideFaces){
 				//Bingo, found the intersected side
 				if(face.intersectsLine(transLine)){
-					//Now, negate movement into this axis
+					//Now, negate movement into this axis by rotating
+					//movement vector alongside axis of face.
+					let dxLength = dX.length();
+					
+					//Convert to unit vector
+					dX.normalize();
+
 					if(face.normal.x != 0)
 						dX.set(0,dX.y,dX.z);
 					else if(face.normal.y != 0)
 						dX.set(dX.x,0,dX.z);
-					else{
-						//Do nothing. Bottom face collision handled
-						//by object update function
+					else
 						dX.set(dX.x,dX.y,0);
-					}
+
+					//now, expand vector along axes of face
+					dX.multiplyScalar(dxLength);
 
 					//No need to check other faces.
 					break;
