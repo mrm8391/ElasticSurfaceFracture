@@ -96,16 +96,16 @@ function initPlane(){
 		if(!addedPairs.has(hash23)){
 			let s = new Spring(p2,p3);
 			springs.push(s);
-			p1.addSpring(s);
 			p2.addSpring(s);
+			p3.addSpring(s);
 			addedPairs.add(hash23);
 		}
 
 		if(!addedPairs.has(hash31)){
 			let s = new Spring(p3,p1);
 			springs.push(s);
+			p3.addSpring(s);
 			p1.addSpring(s);
-			p2.addSpring(s);
 			addedPairs.add(hash31);
 		}
 		
