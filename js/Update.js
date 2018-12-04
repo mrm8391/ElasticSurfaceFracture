@@ -66,6 +66,8 @@ var Update = {
 				//If object collides with point, lock its z coordinate to the object's bottom.
 				//This allows points to "slide" along bottom of cube, but prevents clipping with cube.
 				//Ignore points that are pinned by other means.
+				let min = objectBoundingBox.min;
+				let max = objectBoundingBox.max;
 				if(objectBoundingBox.containsPoint(p.position) && !p.pinned){
 					p.position.z = objectBottom.constant;
 					p.zLock();

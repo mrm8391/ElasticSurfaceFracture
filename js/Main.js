@@ -38,6 +38,7 @@ initScene();
 animate();
 
 function initPlane(){
+	//let plane = Plane.DelaunayTriangulatedPlane(CONF.planeWidth, CONF.planeLevels);
 	let plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
 	let particles = [];
 	let springs = [];
@@ -68,7 +69,7 @@ function initPlane(){
 		particles.push(p);
 	}
 
-	// Create a spring for every edge. 
+	// Create a spring for every edge.
 	// Hash each pair to ensure no duplicates are added.
 	let addedPairs = new Set();
 
@@ -108,7 +109,7 @@ function initPlane(){
 			p1.addSpring(s);
 			addedPairs.add(hash31);
 		}
-		
+
 	}
 
 	//set globals
@@ -127,7 +128,7 @@ function initScene() {
 
 	// Camera and controls
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
-	
+
 	if(!CONF.cameraBottomView){
 		camera.up = new THREE.Vector3(0,-10,100);
 		camera.position.y = -100;
@@ -139,7 +140,7 @@ function initScene() {
 	}
 
 	camera.lookAt(new THREE.Vector3(0,0,0));
-	
+
 	controls = new THREE.TrackballControls( camera );
 	controls.rotateSpeed = 1.0;
 	controls.zoomSpeed = 1.2;
@@ -150,7 +151,7 @@ function initScene() {
 	controls.dynamicDampingFactor = 0.3;
 	controls.keys = [ 65, 83, 68 ];
 	controls.addEventListener( 'change', render );
-	
+
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color( 0xcccccc );
 	//scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
@@ -175,16 +176,17 @@ function initScene() {
 
 	initGeometry();
 	initCubeObject(10, 20);
-	
+
 
 	render();
 }
 
 function initGeometry(){
-	
-	var planeMaterial = new THREE.MeshPhongMaterial( { 
-		color: 0xff00ff, flatShading: true, wireframe: true
+
+	var planeMaterial = new THREE.MeshPhongMaterial( {
+		color: 0xff80ff, flatShading: true, wireframe: false
 	} );
+	planeMaterial.side = THREE.DoubleSide;
 
 	var planeMesh = new THREE.Mesh( planeGeometry, planeMaterial );
 	planeMesh.position = new THREE.Vector3(0,0,0);
@@ -192,7 +194,7 @@ function initGeometry(){
 	planeMesh.matrixAutoUpdate = false;
 	scene.add( planeMesh );
 
-	
+
 }
 
 function initCubeObject(){
@@ -217,7 +219,7 @@ function initCubeObject(){
 
 	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
-		color: 0x000000, flatShading: true
+		color: 0x000000, flatShading: true, visible: true
 	});
 
 	let geometry = new THREE.BoxGeometry(CONF.cubeWidth,CONF.cubeWidth,CONF.cubeWidth);
