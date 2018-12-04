@@ -38,8 +38,8 @@ initScene();
 animate();
 
 function initPlane(){
-	//let plane = Plane.DelaunayTriangulatedPlane(CONF.planeWidth, CONF.planeLevels);
-	let plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
+	let plane = Plane.DelaunayTriangulatedPlane(CONF.planeWidth, CONF.planeLevels);
+	//let plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
 	let particles = [];
 	let springs = [];
 
