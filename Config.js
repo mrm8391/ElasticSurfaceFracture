@@ -22,6 +22,9 @@ var CONF = {
 	objectStopPoint: -50, //Where to stop object movement. null indicates no stop
 	cubeWidth: 10,
 	cubeStartHeight: 20,
+	showWireframe: false,
+	cubeVisible: true,
+	delaunayTriangulation: true,
 	
 	//
 	//Misc

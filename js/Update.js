@@ -69,10 +69,10 @@ var Update = {
 				let min = objectBoundingBox.min;
 				let max = objectBoundingBox.max;
 				if(objectBoundingBox.containsPoint(p.position) && !p.pinned){
-					p.position.z = objectBottom.constant;
+					p.position.z = objectBottom.constant -.1;
 					p.zLock();
 				}else if(p.checkNeighborsZLocked() && !p.pinned){
-					p.position.z = objectBottom.constant;
+					p.position.z = objectBottom.constant -.1;
 					p.softZLock();
 					p.zUnlock();
 				}

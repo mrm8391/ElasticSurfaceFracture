@@ -38,8 +38,11 @@ initScene();
 animate();
 
 function initPlane(){
-	let plane = Plane.DelaunayTriangulatedPlane(CONF.planeWidth, CONF.planeLevels);
-	//let plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
+	let plane = null;
+	if(CONF.delaunayTriangulation)
+		plane = Plane.DelaunayTriangulatedPlane(CONF.planeWidth, CONF.planeLevels);
+	else
+		plane = Plane.crossTessellatedPlane(CONF.planeWidth, CONF.planeLevels);
 	let particles = [];
 	let springs = [];
 
@@ -58,9 +61,11 @@ function initPlane(){
 		let p = new Particle(plane.vertices[i]);
 
 		//Pin verticy if it is on the edge of the plane, to
-		//prevent plane from moving.
-		if(Plane.isPointOnEdgeOfPlane(i,CONF.planeLevels))
-			p.pin();
+		//prevent plane from moving. Disabled for alternative
+		//triangulation due to bugs right now
+		if(!CONF.delaunayTriangulation)
+			if(Plane.isPointOnEdgeOfPlane(i,CONF.planeLevels))
+				p.pin();
 
 		//Check if particle will collide with cube
 		if(boundingBox.containsPoint(p.position))
@@ -184,7 +189,7 @@ function initScene() {
 function initGeometry(){
 
 	var planeMaterial = new THREE.MeshPhongMaterial( {
-		color: 0xff80ff, flatShading: true, wireframe: false
+		color: 0xff80ff, flatShading: true, wireframe: CONF.showWireframe
 	} );
 	planeMaterial.side = THREE.DoubleSide;
 
@@ -219,7 +224,7 @@ function initCubeObject(){
 
 	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
-		color: 0x000000, flatShading: true, visible: true
+		color: 0x000000, flatShading: true, visible: CONF.cubeVisible
 	});
 
 	let geometry = new THREE.BoxGeometry(CONF.cubeWidth,CONF.cubeWidth,CONF.cubeWidth);
