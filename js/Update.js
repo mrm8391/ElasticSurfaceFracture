@@ -91,6 +91,18 @@ var Update = {
 				p.softZUnlock();
 			}
 		}
+	},
+
+	toggleFaceVisibility(faceIndex){
+		let face = planeGeometry.faces[faceIndex];
+
+		//Change index of active material. Materials set in Main.initGeometry
+		if(face.materialIndex === 0)
+			face.materialIndex = 1;
+		else
+			face.materialIndex = 0;
+
+		planeGeometry.groupsNeedUpdate = true;
 	}
 
 }

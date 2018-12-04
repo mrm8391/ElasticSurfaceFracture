@@ -188,12 +188,16 @@ function initScene() {
 
 function initGeometry(){
 
-	var planeMaterial = new THREE.MeshPhongMaterial( {
+	let planeMaterial = new THREE.MeshPhongMaterial( {
 		color: 0xff80ff, flatShading: true, wireframe: CONF.showWireframe
 	} );
+
+	let transparentMaterial = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0 } );
+	let materials = [planeMaterial, transparentMaterial];
+
 	planeMaterial.side = THREE.DoubleSide;
 
-	var planeMesh = new THREE.Mesh( planeGeometry, planeMaterial );
+	var planeMesh = new THREE.Mesh( planeGeometry, materials );
 	planeMesh.position = new THREE.Vector3(0,0,0);
 	planeMesh.updateMatrix();
 	planeMesh.matrixAutoUpdate = false;
