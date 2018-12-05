@@ -18,6 +18,7 @@ class Particle{
 		this.zLocked = false;
 		this.softZLocked = false;
 		this.springs = new Set();
+		this.faces = new Set();
 
 		this.id = Particle.nextId;
 		Particle.nextId++;
@@ -25,6 +26,10 @@ class Particle{
 
 	addSpring(s){
 		this.springs.add(s);
+	}
+
+	addFace(f){
+		this.faces.add(f);
 	}
 
 	checkNeighborsZLocked(){

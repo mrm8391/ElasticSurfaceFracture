@@ -85,6 +85,7 @@ function initPlane(){
 	// Create a spring for every edge.
 	// Hash each pair to ensure no duplicates are added.
 	let addedPairs = new Set();
+	let addedSprings = new Map();
 
 	for(let i = 0; i < plane.faces.length; i++){
 		let v1 = plane.faces[i].a,
@@ -101,28 +102,49 @@ function initPlane(){
 
 		if(!addedPairs.has(hash12)){
 			let s = new Spring(p1,p2);
+			s.addFace(i);
+			addedSprings.set(hash12, s);
+			
 			springs.push(s);
 			p1.addSpring(s);
 			p2.addSpring(s);
 			addedPairs.add(hash12);
 		}
+		else{
+			//Add face to existing spring
+			addedSprings.get(hash12).addFace(i);
+		}
 
 		if(!addedPairs.has(hash23)){
 			let s = new Spring(p2,p3);
+			s.addFace(i);
+			addedSprings.set(hash23, s);
+			
 			springs.push(s);
 			p2.addSpring(s);
 			p3.addSpring(s);
 			addedPairs.add(hash23);
 		}
+		else{
+			//Add face to existing spring
+			addedSprings.get(hash23).addFace(i);
+		}
 
+		
 		if(!addedPairs.has(hash31)){
 			let s = new Spring(p3,p1);
+			s.addFace(i);
+			addedSprings.set(hash31, s);
+			
 			springs.push(s);
 			p3.addSpring(s);
 			p1.addSpring(s);
 			addedPairs.add(hash31);
 		}
-
+		else{
+			//Add face to existing spring
+			addedSprings.get(hash31).addFace(i);
+		}
 	}
 
 	//set globals

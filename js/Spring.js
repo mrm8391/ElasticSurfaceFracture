@@ -17,6 +17,8 @@ class Spring{
 		this.p2 = p2;
 		
 		this.rip = false;
+		this.ripped = false;
+		this.faceInds = [];
 	    
 	    this.length = 0;
 	    this.restingLength = l;
@@ -34,6 +36,37 @@ class Spring{
 	    this.pointVec = this.p2.position.clone().sub(this.p1.position);
 		this.unitVec = this.pointVec.clone().divideScalar(this.length);
 		
+		if(!(this.p1.position.x >= -CONF.cubeWidth - CONF.cubeWidth/10 &&
+			this.p1.position.x <= CONF.cubeWidth + CONF.cubeWidth/10 &&
+			this.p1.position.y >= -CONF.cubeWidth - CONF.cubeWidth/10 &&
+			this.p1.position.y <= CONF.cubeWidth + CONF.cubeWidth/10) 
+			
+			&&
+			this.restingLength > 0){
+			
+			
+			
+			// If the spring reaches its absolute tearing point, the face will tear
+			// aka become hidden
+			if(Math.abs(this.length - this.restingLength) > this.restingLength * CONF.maxStretchFactor / CONF.planeWidth + CONF.maxStretchFactor/5){
+				this.ripped = true;
+			}
+
+			// If spring reaches max stable distance from equilibrium,
+			// then as the spring keeps stretching, it will not be able to return to equilibrium
+			// aka the spring is disabled from affecting its particles' velocities/force
+			// but the incident faces 
+			else if(Math.abs(this.length - this.restingLength) > this.restingLength * CONF.maxStretchFactor / CONF.planeWidth){
+			//this.restingLength * CONF.maxStretchFactor * CONF.planeLevels){
+			this.rip = true;
+			}
+		}
+	}
+
+	addFace(faceInd){
+		if(this.faceInds.length < 2){
+			this.faceInds.push(faceInd);
+		}
 	}
 }
 

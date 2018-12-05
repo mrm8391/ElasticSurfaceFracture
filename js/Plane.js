@@ -329,7 +329,6 @@ var Plane = {
 			}
 
 			faces.push(new THREE.Face3(f0, f1, f2));
-			//faces.push(new THREE.Face3(f0,f2,f1));
 		}
 
 		// Add all the unique delaunay points to vertices

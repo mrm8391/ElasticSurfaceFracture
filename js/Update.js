@@ -6,42 +6,49 @@ var Update = {
 
 	updatePhysics(){
 
-		var i=0;
+		
 		for(let s of planeSprings){
 			let p1 = s.p1,
 				p2 = s.p2;
 
 			s.updateValues();
 
-			// Get spring force depending on spring displacement
-			let springForce = CONF.springConstant * (s.length - s.restingLength);
+			if(!s.rip){
 
-			let springForceVec = s.unitVec.clone().multiplyScalar(springForce);
+				// Get spring force depending on spring displacement
+				let springForce = CONF.springConstant * (s.length - s.restingLength);
 
-			// Dampen vectors, based on each point's velocity. 
-			let p1dampen = p1.velocity.clone().multiplyScalar(CONF.dampConstant),
-			p2dampen = p2.velocity.clone().multiplyScalar(CONF.dampConstant);
+				let springForceVec = s.unitVec.clone().multiplyScalar(springForce);
 
-			// Set damping to zero if disabled
-			if(CONF.dampingOff){
-				p1dampen.set(0,0,0);
-				p2dampen.set(0,0,0);
+				// Dampen vectors, based on each point's velocity. 
+				let p1dampen = p1.velocity.clone().multiplyScalar(CONF.dampConstant),
+					p2dampen = p2.velocity.clone().multiplyScalar(CONF.dampConstant);
+
+				// Set damping to zero if disabled
+				if(CONF.dampingOff){
+					p1dampen.set(0,0,0);
+					p2dampen.set(0,0,0);
+				}
+
+				// Dampen force in each direction, then apply
+				let p1force = springForceVec.clone().sub(p1dampen),
+					p2force = springForceVec.clone().negate().sub(p2dampen);
+
+				p1.applyForce(p1force);
+				p2.applyForce(p2force);
 			}
-
-			// Dampen force in each direction, then apply
-			let p1force = springForceVec.clone().sub(p1dampen),
-			p2force = springForceVec.clone().negate().sub(p2dampen);
-
-			p1.applyForce(p1force);
-			p2.applyForce(p2force);
-
-			i++;
+			else if((s.ripped) || (s.rip && !CONF.tornFacesVisible)){
+				for (let i = 0; i < s.faceInds.length; i++){
+					Update.toggleFaceVisibility(s.faceInds[i]);
+				}
+			}// else do nothingif(!s.ripped)
+			
 		}
 
-		i=0;
+		
 		for(let p of planeParticles){
 			p.updatePosition(CONF.timeStep);
-			i++;
+			
 		}
 
 		planeGeometry.verticesNeedUpdate = true;
@@ -99,8 +106,8 @@ var Update = {
 		//Change index of active material. Materials set in Main.initGeometry
 		if(face.materialIndex === 0)
 			face.materialIndex = 1;
-		else
-			face.materialIndex = 0;
+		//else
+		//	face.materialIndex = 0;
 
 		planeGeometry.groupsNeedUpdate = true;
 	}
