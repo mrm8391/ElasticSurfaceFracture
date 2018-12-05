@@ -9,8 +9,8 @@ var CONF = {
 	//
 	timeStep: 0.05, //time that passes each frame of animation. Used to update particle positions
 	dampingOff: false, //true to disable damping of spring energy
-	dampConstant: .75, //how heavily to damp spring energy
-	springConstant: 2.5,
+	dampConstant: .25, //how heavily to damp spring energy
+	springConstant: 1.5,
 	pixelsPerMeter: 50,
 
 	//
@@ -18,15 +18,17 @@ var CONF = {
 	//
 	planeLevels: 60, //How many levels the plane is tesselated to
 	planeWidth: 50, //width of the plane in pixels
-	objectDescendRate: 0.25, //speed, in pixels, that the object descends
-	objectStopPoint: -30, //Where to stop object movement. null indicates no stop
-	maxStretchFactor: 30,
+	objectDescendRate: 0.015625, //speed, in pixels, that the object descends
+	objectStopPoint: -20, //Where to stop object movement. null indicates no stop
+	maxStretchFactor: 10,
 	cubeWidth: 10,
-	cubeStartHeight: 20,
-	showWireframe: false,
+	cubeStartHeight: 10,
+	//showWireframe: false,
+	showWireframe: true,
 	cubeVisible: true,
-	delaunayTriangulation: true,
+	delaunayTriangulation: false,
 	tornFacesVisible: true,
+	gapOnCubeBottom: .1,
 	
 	//
 	//Misc

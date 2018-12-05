@@ -210,7 +210,7 @@ function initScene() {
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	initGeometry();
-	initCubeObject(10, 20);
+	initCubeObject();
 
 
 	render();
@@ -243,7 +243,7 @@ function initCubeObject(){
 	let bound = CONF.cubeWidth/2;
 	let cubeTranslation = new THREE.Vector3(0,0,CONF.cubeStartHeight);
 	let boundingBox = new THREE.Box3(
-		new THREE.Vector3((-1)*bound,(-1)*bound,(-1)*bound - 1),
+		new THREE.Vector3((-1)*bound,(-1)*bound,(-1)*bound - CONF.gapOnCubeBottom),
 		new THREE.Vector3(bound,bound,bound)
 	);
 	boundingBox.translate(cubeTranslation);
@@ -253,7 +253,7 @@ function initCubeObject(){
 	let rightF = new THREE.Plane(new THREE.Vector3(1,0,0), bound);
 	let frontF = new THREE.Plane(new THREE.Vector3(0,-1,0), (-1)*bound);
 	let backF = new THREE.Plane(new THREE.Vector3(0,1,0), bound);
-	let bottomF = new THREE.Plane(new THREE.Vector3(0,0,-1), (-1)*bound);
+	let bottomF = new THREE.Plane(new THREE.Vector3(0,0,-1), (-1)*bound - CONF.gapOnCubeBottom);
 	bottomF.translate(cubeTranslation);
 
 	// Now, initialize cube object in scene

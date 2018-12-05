@@ -35,7 +35,7 @@ class Particle{
 	checkNeighborsZLocked(){
 		for(let s of this.springs){
 			if(s.p1.zLocked || s.p2.zLocked)
-				return true;1
+				return true;
 		}
 
 		return false;
@@ -139,8 +139,9 @@ class Particle{
 						dX.set(0,dX.y,dX.z);
 					else if(face.normal.y != 0)
 						dX.set(dX.x,0,dX.z);
-					else
+					else if(face.normal.z != 0)
 						dX.set(dX.x,dX.y,0);
+					else throw "particle-face collision: bad state";
 
 					//now, expand vector along axes of face
 					dX.multiplyScalar(dxLength);
@@ -149,6 +150,27 @@ class Particle{
 					break;
 				}
 			}
+
+			//No intersection found. Find closest face of cube that point should be on.
+			let bound = CONF.cubeWidth / 2;
+			let relativeZ = (newPos.z - objectBottom.constant - bound);
+			let absX = Math.abs(newPos.x), absY = Math.abs(newPos.y), absZ = Math.abs(relativeZ);
+
+			if(Math.max(absX,absY,absZ) > bound){
+				// do nothing. particle not actually within any cube bounds
+			}else if(absX >= Math.max(absY,absZ)){
+				dX.x += (Math.sign(newPos.x) * (bound)) - newPos.x;
+			}else if(absY >= Math.max(absX,absZ)){
+				dX.y += (Math.sign(newPos.y) * (bound)) - newPos.y;
+			}else if(absZ >= Math.max(absX,absY)){
+				dX.z += (Math.sign(newPos.z) * (bound)) - (relativeZ);
+			}else{
+				throw "Invalid state in particle position correction";
+			}
+		}
+
+		if(Math.abs(dX.z) > 2){
+			console.log("tf is going on");
 		}
 
 		this.position.add(dX);
