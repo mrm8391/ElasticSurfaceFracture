@@ -118,36 +118,37 @@ var Plane = {
 			boxIncrement = (width / levels)
 			crossStart = boxStart + (boxIncrement / 2);
 
-		for(let i = 0; i < 10000; i++){
+		let numOfPoints = Math.pow(levels, 2) + Math.pow(levels - 1, 2);
+		for(let i = 0; i < numOfPoints; i++){
 			points.push(
 				[(Math.random() * (-boxStart - boxStart) + boxStart),
 				(Math.random() * (-boxStart - boxStart) + boxStart)
 				]
-			)
+			);
 		}
 
 		//Add points along the edges of the bounding square, to lock
 		//in the edges
-		/*points.push(
+		points.push(
 			[boxStart, boxStart],
-			[boxStart, boxStart/2],
-			[boxStart, 0],
-			[boxStart, -boxStart/2],
+			//[boxStart, boxStart/2],
+			//[boxStart, 0],
+			//[boxStart, -boxStart/2],
 
 			[boxStart, -boxStart],
-			[boxStart/2, -boxStart],
-			[0, -boxStart],
-			[-boxStart/2, -boxStart],
+			//[boxStart/2, -boxStart],
+			//[0, -boxStart],
+			//[-boxStart/2, -boxStart],
 
 			[-boxStart, -boxStart],
-			[-boxStart, boxStart/2],
-			[-boxStart, 0],
-			[-boxStart, -boxStart/2],
+			//[-boxStart, boxStart/2],
+			//[-boxStart, 0],
+			//[-boxStart, -boxStart/2],
 
-			[-boxStart, boxStart],
-			[boxStart/2, boxStart],
-			[0, boxStart],
-			[-boxStart/2, boxStart]);*/
+			[-boxStart, boxStart]);
+			//[boxStart/2, boxStart],
+			//[0, boxStart],
+			//[-boxStart/2, boxStart]);*/
 		/*
 		// Generate points
 		for(let i = 0; i < levels + 1; i++){
@@ -243,9 +244,9 @@ var Plane = {
 			let v2 = new THREE.Vector3(tPt2[0], tPt2[1], 0);*/
 			
 			// Cantor hashes of the x and y coordinates for each vertex
-			let hash0 = Utils.cantorHash(tPt0[0], tPt0[1]) - boxStart + 1,
-				hash1 = Utils.cantorHash(tPt1[0], tPt1[1]) - boxStart + 1,
-				hash2 = Utils.cantorHash(tPt2[0], tPt2[1]) - boxStart + 1;
+			let hash0 = Utils.cantorHash(tPt0[0] + width + 1 - boxStart, tPt0[1] - boxStart) - boxStart + 1,
+				hash1 = Utils.cantorHash(tPt1[0] + width + 1 - boxStart, tPt1[1] - boxStart) - boxStart + 1,
+				hash2 = Utils.cantorHash(tPt2[0] + width + 1 - boxStart, tPt2[1] - boxStart) - boxStart + 1;
 			
 			let f0 = vertIndex,
 				f1 = vertIndex,
@@ -260,7 +261,13 @@ var Plane = {
 				addedVerts.set(hash0, vertIndex);
 				
 				//add the vertex to the plane's vertices
-				vertices.push(new THREE.Vector3(tPt0[0], tPt0[1], 0));
+				let vert = new THREE.Vector3(tPt0[0], tPt0[1], 0)
+				vertices.push(vert);
+				
+				if(vert.x <= boxStart + .5 || vert.x >= -boxStart - .5
+					|| vert.y <= boxStart + .5 || vert.y >= -boxStart - .5){
+					EdgeVerts.addVert(vertIndex, vertices[vertIndex]);
+				}
 
 				//set the index for this point in the face
 				f0 = vertIndex;
@@ -279,7 +286,13 @@ var Plane = {
 				addedVerts.set(hash1, vertIndex);
 				
 				//add the vertex to the plane's vertices
-				vertices.push(new THREE.Vector3(tPt1[0], tPt1[1], 0));
+				let vert = new THREE.Vector3(tPt1[0], tPt1[1], 0)
+				vertices.push(vert);
+				
+				if(vert.x <= boxStart + .5 || vert.x >= -boxStart - .5
+					|| vert.y <= boxStart + .5 || vert.y >= -boxStart - .5){
+					EdgeVerts.addVert(vertIndex, vertices[vertIndex]);
+				}
 
 				//set the index for this point in the face
 				f1 = vertIndex;
@@ -298,7 +311,13 @@ var Plane = {
 				addedVerts.set(hash2, vertIndex);
 				
 				//add the vertex to the plane's vertices
-				vertices.push(new THREE.Vector3(tPt2[0], tPt2[1], 0));
+				let vert = new THREE.Vector3(tPt1[0], tPt1[1], 0)
+				vertices.push(vert);
+				
+				if(vert.x <= boxStart + .5 || vert.x >= -boxStart - .5
+					|| vert.y <= boxStart + .5 || vert.y >= -boxStart - .5){
+					EdgeVerts.addVert(vertIndex, vertices[vertIndex]);
+				}
 
 				//set the index for this point in the face
 				f2 = vertIndex;
@@ -459,4 +478,8 @@ var Plane = {
 
 		return row==0 || row==tessLevels || col==0 || col==tessLevels;
 	}
+
+	/*disPointOnEdgeOfPlane(){
+		
+	}*/
 }

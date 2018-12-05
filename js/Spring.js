@@ -33,6 +33,7 @@ class Spring{
 		this.length = this.p1.position.distanceTo(this.p2.position);
 	    this.pointVec = this.p2.position.clone().sub(this.p1.position);
 		this.unitVec = this.pointVec.clone().divideScalar(this.length);
+		
 	}
 }
 

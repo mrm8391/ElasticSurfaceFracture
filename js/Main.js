@@ -63,10 +63,18 @@ function initPlane(){
 		//Pin verticy if it is on the edge of the plane, to
 		//prevent plane from moving. Disabled for alternative
 		//triangulation due to bugs right now
-		if(!CONF.delaunayTriangulation)
-			if(Plane.isPointOnEdgeOfPlane(i,CONF.planeLevels))
+		if(!CONF.delaunayTriangulation){
+			if(Plane.isPointOnEdgeOfPlane(i,CONF.planeLevels)){
 				p.pin();
-
+			}
+		}
+		else {
+			if(EdgeVerts.hasVert(i)){
+				p.pin();
+			}
+		}
+		
+		
 		//Check if particle will collide with cube
 		if(boundingBox.containsPoint(p.position))
 			collisions.push(p);
