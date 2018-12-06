@@ -8,13 +8,27 @@
 </head>
 <body>
 
-    <h1>My only purpose is to render webgl scenes</h1>
+    <h1>Elastic Surface Fracture Demonstration</h1>
 
-    <div id="container"></div>
+    <!-- Can't get a side by side view going yet, css sucks -->
+    <!-- <div id="container" style="width:100%; height: 100vh">
+        <canvas id="canvas" style="float:left; width 75%; height: 80%">
+          An alternative text describing what your canvas displays. 
+        </canvas>
+        <div id="confControls" style="float:right; width:25%;">
+            
+        </div>
+    </div> -->
 
-	<!-- Extremely complex html -->
+    <!-- Extremely complex html -->
     <button id="startButtonId">Play/Pause</button>
     <button id="dampButtonId">Toggle damping</button>
+    <label for="planeLevelInput">Density of plane tesselation:</label>
+    <input type="text" id="planeLevelInputId" name="planeLevelInput" placeholder="20">
+	
+    <br>
+    <br>
+    <br>
 
 	<!-- Libraries -->
     <script src="js/libraries/three.min.js"></script>
@@ -24,6 +38,7 @@
 
 	<!-- Code -->
     <script src="Config.js"></script>
+    <script src="js/Buttons.js"></script>
     <script src="https://unpkg.com/delaunator@3.0.2/delaunator.js"></script> <!-- dev build -->
     <script src="js/EdgeVerts.js"></script>
     <script src="js/Utilities.js"></script>

@@ -27,12 +27,7 @@ var currentCollisions; //points on the plane that are currently colliding (NOT U
 // Configuration constants
 paused = CONF.startPaused;
 
-
-var startButton = document.getElementById( 'startButtonId' );
-startButton.onclick = function() {paused = !paused;}
-var dampButton = document.getElementById( 'dampButtonId' );
-dampButton.onclick = function() {CONF.dampingOff = !CONF.dampingOff;}
-
+Buttons.registerButtonsAndForms();
 initPlane();
 initScene();
 animate();
@@ -176,17 +171,6 @@ function initScene() {
 
 	camera.lookAt(new THREE.Vector3(0,0,0));
 
-	controls = new THREE.TrackballControls( camera );
-	controls.rotateSpeed = 1.0;
-	controls.zoomSpeed = 1.2;
-	controls.panSpeed = 0.8;
-	controls.noZoom = false;
-	controls.noPan = false;
-	controls.staticMoving = true;
-	controls.dynamicDampingFactor = 0.3;
-	controls.keys = [ 65, 83, 68 ];
-	controls.addEventListener( 'change', render );
-
 	scene = new THREE.Scene();
 	scene.background = new THREE.Color( 0xcccccc );
 	//scene.fog = new THREE.FogExp2( 0xcccccc, 0.002 );
@@ -202,11 +186,35 @@ function initScene() {
 	scene.add( light );
 
 	// renderer
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+
+	// placeholder for side by side view
+	// let threejsCanvas = document.getElementById('canvas');
+	// let w = window.getComputedStyle(threejsCanvas, null).width;
+	// let h = window.getComputedStyle(threejsCanvas, null).height;
+	// threejsCanvas.setAttribute('width', w);
+	// threejsCanvas.setAttribute('height', h);
+
+	//renderer = new THREE.WebGLRenderer( { antialias: true, canvas: threejsCanvas} );
+	renderer = new THREE.WebGLRenderer( { antialias: true} );
 	renderer.setPixelRatio( window.devicePixelRatio );
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	// renderer.setSize( parseInt(w,10), parseInt(h,10));
+	renderer.setSize( window.innerWidth, window.innerHeight);
+	
 	document.body.appendChild( renderer.domElement );
-	//
+
+	// Controls. Ensure event listeners are only registered for threejs canvas,
+	// otherwise input fields won't work.
+	controls = new THREE.TrackballControls( camera, renderer.domElement );
+	controls.rotateSpeed = 1.0;
+	controls.zoomSpeed = 1.2;
+	controls.panSpeed = 0.8;
+	controls.noZoom = false;
+	controls.noPan = false;
+	controls.staticMoving = true;
+	controls.dynamicDampingFactor = 0.3;
+	controls.keys = [ 65, 83, 68 ];
+	controls.addEventListener( 'change', render );
+	
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	initGeometry();
