@@ -110,7 +110,26 @@ var Update = {
 		//	face.materialIndex = 0;
 
 		planeGeometry.groupsNeedUpdate = true;
+	},
+
+	setCamera(cameraPosObject){
+		camera.up = cameraPosObject.up;
+		camera.position.x = cameraPosObject.position.x;
+		camera.position.y = cameraPosObject.position.y;
+		camera.position.z = cameraPosObject.position.z;
+	},
+
+	toggleCamera(){
+		if(cameraBottom){
+			Update.setCamera(sideCameraView);
+		}else{
+			Update.setCamera(bottomCameraView);
+		}
+
+		cameraBottom = !cameraBottom;
 	}
+
+
 
 }
 

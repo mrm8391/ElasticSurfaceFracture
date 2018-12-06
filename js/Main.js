@@ -26,6 +26,17 @@ var currentCollisions; //points on the plane that are currently colliding (NOT U
 
 // Configuration constants
 paused = CONF.startPaused;
+var cameraBottom = CONF.cameraBottomView;
+
+var sideCameraView = {
+	up: new THREE.Vector3(0,-10,100),
+	position: new THREE.Vector3(0, -100, 10)
+};
+
+var bottomCameraView = {
+	up: new THREE.Vector3(0,-1,0),
+	position: new THREE.Vector3(0, 0.5, -75)
+};
 
 Buttons.registerButtonsAndForms();
 initPlane();
@@ -160,13 +171,9 @@ function initScene() {
 	camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 1000 );
 
 	if(!CONF.cameraBottomView){
-		camera.up = new THREE.Vector3(0,-10,100);
-		camera.position.y = -100;
-		camera.position.z = 10;
+		Update.setCamera(sideCameraView);
 	}else{
-		camera.up = new THREE.Vector3(0,-1,0);
-		camera.position.y = 0.5;
-		camera.position.z = -75;
+		Update.setCamera(bottomCameraView);
 	}
 
 	camera.lookAt(new THREE.Vector3(0,0,0));
@@ -231,6 +238,10 @@ function initGeometry(){
 	} );
 
 	let transparentMaterial = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0 } );
+	// let planeWireframeMaterial = new THREE.MeshPhongMaterial( {
+	// 	color: 0xff80ff, flatShading: true, wireframe: true
+	// } );
+	
 	let materials = [planeMaterial, transparentMaterial];
 
 	planeMaterial.side = THREE.DoubleSide;
