@@ -13,7 +13,7 @@ var Update = {
 
 			s.updateValues();
 
-			if(!s.rip){
+			if(!s.rip || !CONF.tearable){
 
 				// Get spring force depending on spring displacement
 				let springForce = CONF.springConstant * (s.length - s.restingLength);
@@ -37,7 +37,7 @@ var Update = {
 				p1.applyForce(p1force);
 				p2.applyForce(p2force);
 			}
-			else if((s.ripped) || (s.rip && !CONF.tornFacesVisible)){
+			else if(((s.ripped) || (s.rip && !CONF.tornFacesVisible))){
 				for (let i = 0; i < s.faceInds.length; i++){
 					Update.toggleFaceVisibility(s.faceInds[i]);
 				}
