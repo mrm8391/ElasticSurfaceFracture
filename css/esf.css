@@ -1,0 +1,24 @@
+/* CSS for elastic surface fracture canvas and controls */
+
+#container{
+	width: 100%;
+	height: 100vh;
+}
+
+#container #canvas{
+	float: left;
+	width: 75%;
+	height: 80%;
+}
+
+#container #confControls{
+	float: right;
+	width: 24%;
+	height: 80%;
+}
+
+#container::after { 
+  content: "";
+  display: block; 
+  clear: both;
+}

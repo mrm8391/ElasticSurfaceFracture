@@ -195,19 +195,19 @@ function initScene() {
 	// renderer
 
 	// placeholder for side by side view
-	// let threejsCanvas = document.getElementById('canvas');
-	// let w = window.getComputedStyle(threejsCanvas, null).width;
-	// let h = window.getComputedStyle(threejsCanvas, null).height;
-	// threejsCanvas.setAttribute('width', w);
-	// threejsCanvas.setAttribute('height', h);
+	let threejsCanvas = document.getElementById('canvas');
+	let w = window.getComputedStyle(threejsCanvas, null).width;
+	let h = window.getComputedStyle(threejsCanvas, null).height;
+	threejsCanvas.setAttribute('width', w);
+	threejsCanvas.setAttribute('height', h);
 
-	//renderer = new THREE.WebGLRenderer( { antialias: true, canvas: threejsCanvas} );
-	renderer = new THREE.WebGLRenderer( { antialias: true} );
+	renderer = new THREE.WebGLRenderer( { antialias: true, canvas: threejsCanvas} );
+	// renderer = new THREE.WebGLRenderer( { antialias: true} );
 	renderer.setPixelRatio( window.devicePixelRatio );
-	// renderer.setSize( parseInt(w,10), parseInt(h,10));
-	renderer.setSize( window.innerWidth, window.innerHeight);
+	renderer.setSize( parseInt(w,10), parseInt(h,10));
+	// renderer.setSize( window.innerWidth, window.innerHeight);
 	
-	document.body.appendChild( renderer.domElement );
+	// document.body.appendChild( renderer.domElement );
 
 	// Controls. Ensure event listeners are only registered for threejs canvas,
 	// otherwise input fields won't work.
