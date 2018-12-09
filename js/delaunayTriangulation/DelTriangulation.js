@@ -13,18 +13,16 @@ var DelTriangulation = {
             [CONF.planeWidth * 1.5, -CONF.planeWidth/2],
             [-CONF.planeWidth/2, CONF.planeWidth * 1.5]],
 
-    boundBucket: new DelaunayBucket(boundingTriangle[0], 
-                                    boundingTriangle[1], 
-                                    boundingTriangle[2]),
-    
-
     //For the purposes of this implementation of a DCEL, for Delaunay Triangulation,
     //sites are simply in the form [x,y] and do not contain any other data or metadata
     allSites:  [],
 
+    //list of sites left in the triangulation (most cocircular sites are removed)
+    delaunaySites: [],
+
     //the list of all the triangles. This is a map because the triangles are 
     //frequently added and removed
-    allTriangles: [],
+    allBuckets: [],
 
     //Note that whenever a new edge is introduced, the only time an old edge is removed is when
     //edge flipping is performed. This is an edge list instead of a halfedge list because 
@@ -39,22 +37,26 @@ var DelTriangulation = {
     //map the DT to the open source functions and their returns
     triangulate(sites){
 
+        let boundBucket = new DelaunayBucket(
+            DelTriangulation.boundingTriangle[0], 
+            DelTriangulation.boundingTriangle[1], 
+            DelTriangulation.boundingTriangle[2],
+            0);
 
         //v should be in the form [x, y]
         for(let v of sites){
-            
-            DelTriangulation.allSites.push(v);
-
+            DelTriangulation.allSites.set(v);
+            boundBucket.addPoint(v);
         }
+        DelTriangulation.subTriangulate(boundBucket);
 
-
-        for (let v = 0; v < allSites.length; v++){
+        /*for (let v = 0; v < allSites.length; v++){
             DelTriangulation.insertVert(v);
-        }
+        }/**/
     },
 
     //Insert
-    insertVert(v){
-
+    subTriangulate(triang){
+        
     }
 }

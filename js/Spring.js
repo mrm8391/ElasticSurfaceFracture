@@ -36,10 +36,12 @@ class Spring{
 	    this.pointVec = this.p2.position.clone().sub(this.p1.position);
 		this.unitVec = this.pointVec.clone().divideScalar(this.length);
 		
-		if(!(this.p1.position.x >= -CONF.cubeWidth &&
-			this.p1.position.x <= CONF.cubeWidth &&
-			this.p1.position.y >= -CONF.cubeWidth &&
-			this.p1.position.y <= CONF.cubeWidth) 
+		let boundFrom0 = CONF.cubeWidth/2 + .5/CONF.objectDescendRate;
+
+		if(!(this.p1.position.x >= -boundFrom0 &&
+			this.p1.position.x <= boundFrom0 &&
+			this.p1.position.y >= -boundFrom0 &&
+			this.p1.position.y <= boundFrom0) 
 			
 			&&
 			this.restingLength > 0){
