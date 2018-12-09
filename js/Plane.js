@@ -125,20 +125,23 @@ var Plane = {
 				(Math.random() * (-boxStart - boxStart) + boxStart)
 				]
 			);
-		}
+		}/**/
 
 		//Add points along the edges of the bounding square, to lock
 		//in the edges
 		points.push(
+			//A little offset to avoid cocircular points
 			[boxStart, boxStart],
 			//[boxStart, boxStart/2],
 			//[boxStart, 0],
 			//[boxStart, -boxStart/2],
 
-			[boxStart, -boxStart],
+			[-boxStart, boxStart],
 			//[boxStart/2, -boxStart],
 			//[0, -boxStart],
 			//[-boxStart/2, -boxStart],
+
+			
 
 			[-boxStart, -boxStart],
 			//[-boxStart, boxStart/2],
