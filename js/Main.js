@@ -46,6 +46,7 @@ var bottomCameraView = {
 Buttons.registerPageInputs();
 
 function initAndStart(){
+	Buttons.updateFromTextFields();
 	simulationRunning = true;
 
 	initPlane();
@@ -272,7 +273,7 @@ function initGeometry(){
 	scene.add( planeMesh );
 
 	// Ensure all material indices are correct
-	Update.toggleWireframe(false);
+	Update.toggleWireframe(CONF.showWireframe);
 }
 
 function initCubeObject(){

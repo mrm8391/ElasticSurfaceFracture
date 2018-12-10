@@ -18,21 +18,21 @@
         </canvas>
         <div id="confControls">
             <button class="ConfOption" id="initializeId">Initialize/Reset</button>
-            <button class="ConfOption" id="startId">Play/Pause</button>
+            
+            <label class="ConfOption">Paused: <input id="pauseId" type="checkbox"></label>
             <label class="ConfOption">Damping enabled: <input id="dampId" type="checkbox"></label>
             <label class="ConfOption">Material tearing enabled: <input id="tearId" type="checkbox"></label>
             <label class="ConfOption">Tearing visibility enabled: <input id="tearVisibleId" type="checkbox"></label>
             <label class="ConfOption">Cube visible: <input id="cubeVisibleId" type="checkbox"></label>
             <button class="ConfOption" id="cameraId">Camera toggle</button>
             <label class="ConfOption">Plane wireframe visible: <input id="wireframeId" type="checkbox"></label>
-            <!-- <label for="planeLevelInput">Density of plane tesselation:</label>
-            <input type="text" id="planeLevelInputId" name="planeLevelInput" placeholder="20">
-            <label for="cubeWidthInput">Width of cube object:</label>
-            <input type="text" id="cubeWidthInputId" name="cubeWidthInput" placeholder="5"> -->
-            <!-- <label for="stopPointInput">Stop point for object:</label>
-            <input type="text" id="stopPointInputId" name="stopPointInput" placeholder="-30">
-            <label for="maxStretchInput">Maximum stretching a spring can handle:</label>
-            <input type="text" id="maxStretchInputId" name="maxStretchInput" placeholder="10"> -->
+            
+            <h2>Geometry related constants (changes apply on simulation reset/initialization)</h2>
+            <label class="ConfOption">Density of plane tesselation: <input type="text" id="planeLevelId"></label>
+            <label class="ConfOption">Object descend rate: <input type="text" id="objectDescendId"></label>
+            <label class="ConfOption">Width of cube object: <input type="text" id="cubeWidthId"></label>
+            <label class="ConfOption">Object stop point (z-axis): <input type="text" id="stopPointId"></label>
+            <label class="ConfOption">Max stretch factor for springs: <input type="text" id="maxStretchId"></label>
         </div>
     </div>
 
