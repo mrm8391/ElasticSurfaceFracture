@@ -28,5 +28,71 @@ var Utils = {
 	determinant(p, q, r){
 		return (p[0]*q[1] + q[0]*r[1] + r[0]*p[1]
             - p[1]*q[0] - q[1]*r[0] - r[1]*p[0]);
+	},
+
+	/*
+	Recursive utility function for disposing of threejs resources in a scene.
+
+	Credit goes to https://stackoverflow.com/a/48768960
+	*/
+	clearThree(obj) {
+		while (obj.children.length > 0) {
+			Utils.clearThree(obj.children[0])
+			obj.remove(obj.children[0]);
+		}
+		if (obj.geometry) obj.geometry.dispose()
+		if (obj.material) obj.material.dispose()
+		if (obj.texture) obj.texture.dispose()
+	},
+
+	/*
+	Utility function for disposing of threejs resources in a scene.
+
+	Function is a collaborative effort from several users on this post:
+	https://stackoverflow.com/questions/33152132/three-js-collada-whats-the-proper-way-to-dispose-and-release-memory-garbag/33199591#33199591
+	*/
+	disposeNode(parentObject) {
+		parentObject.traverse(function(node) {
+			if (node instanceof THREE.Mesh) {
+				if (node.geometry) {
+					node.geometry.dispose();
+				}
+				if (node.material) {
+					var materialArray;
+					if (node.material instanceof THREE.MeshFaceMaterial || node.material instanceof THREE.MultiMaterial) {
+						materialArray = node.material.materials;
+					} else if (node.material instanceof Array) {
+						materialArray = node.material;
+					}
+					if (materialArray) {
+						materialArray.forEach(function(mtrl, idx) {
+							if (mtrl.map) mtrl.map.dispose();
+							if (mtrl.lightMap) mtrl.lightMap.dispose();
+							if (mtrl.bumpMap) mtrl.bumpMap.dispose();
+							if (mtrl.normalMap) mtrl.normalMap.dispose();
+							if (mtrl.specularMap) mtrl.specularMap.dispose();
+							if (mtrl.envMap) mtrl.envMap.dispose();
+							mtrl.dispose();
+						});
+					} else {
+						if (node.material.map) node.material.map.dispose();
+						if (node.material.lightMap) node.material.lightMap.dispose();
+						if (node.material.bumpMap) node.material.bumpMap.dispose();
+						if (node.material.normalMap) node.material.normalMap.dispose();
+						if (node.material.specularMap) node.material.specularMap.dispose();
+						if (node.material.envMap) node.material.envMap.dispose();
+						node.material.dispose();
+					}
+				}
+			}
+		});
+	},
+
+	disposeHierarchy(node, callback) {
+		for (var i = node.children.length - 1; i >= 0; i--) {
+			var child = node.children[i];
+			Utils.disposeHierarchy(child, callback);
+			callback(child);
+		}
 	}
 };

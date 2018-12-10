@@ -24,9 +24,10 @@ var objectBottom; //plane associated with bottom of cube object
 var possibleCollisions; //points on the plane that can collide with object
 var currentCollisions; //points on the plane that are currently colliding (NOT USED YET)
 
-// Configuration constants
-paused = CONF.startPaused;
+// Runtime constants
 var cameraBottom = CONF.cameraBottomView;
+var simulationRunning = false;
+var physicsPause = CONF.startPaused;
 
 var sideCameraView = {
 	up: new THREE.Vector3(0,-10,100),
@@ -38,10 +39,26 @@ var bottomCameraView = {
 	position: new THREE.Vector3(0, 0.5, -75)
 };
 
+//
+// Main; entry point of simulation
+//
+
 Buttons.registerPageInputs();
-initPlane();
-initScene();
-animate();
+
+function initAndStart(){
+	simulationRunning = true;
+
+	initPlane();
+	initScene();
+	animate();
+}
+
+function resetSimulation(){
+	simulationRunning = false;
+
+	Utils.disposeHierarchy(scene, Utils.disposeNode);
+	initAndStart();
+}
 
 function initPlane(){
 	let plane = null;
@@ -310,12 +327,22 @@ function onWindowResize() {
 }
 
 function animate() {
-	requestAnimationFrame( animate );
-	if(paused==true) return;
+	// If simulation no longer running (ie reset)
+	// then cancel the animation loop
+	if(!simulationRunning) return;
 
+	requestAnimationFrame( animate );
+
+	// Update camera position
 	controls.update();
-	Update.updateObject();
-	Update.updatePhysics();
+
+	// Update physics. Still renders if this is disabled, 
+	// so camera can be moved
+	if(!physicsPause){
+		Update.updateObject();
+		Update.updatePhysics();
+	}
+
 	renderer.render( scene, camera );
 }
 

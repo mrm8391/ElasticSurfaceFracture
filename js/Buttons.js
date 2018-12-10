@@ -1,5 +1,6 @@
 var Buttons = {
 
+	initializeButton: document.getElementById('initializeId'),
 	startButton: document.getElementById('startId'),
 	dampInput: document.getElementById('dampId'),
 	tearInput: document.getElementById('tearId'),
@@ -16,7 +17,15 @@ var Buttons = {
 	allElements: null,
 
 	registerPageInputs(){
-		Buttons.startButton.onclick = function() {paused = !paused;};
+		Buttons.initializeButton.onclick = function() {
+			if(!simulationRunning){
+				initAndStart();
+			}else{
+				resetSimulation();
+			}
+		};
+
+		Buttons.startButton.onclick = function() {physicsPause = !physicsPause;};
 		Buttons.dampInput.onclick = function() {CONF.dampingOn = this.checked;};
 		Buttons.tearInput.onclick = function() {CONF.tearable = this.checked;};
 		Buttons.tearVisibleInput.onclick = function() {CONF.tornFacesVisible = this.checked;};
