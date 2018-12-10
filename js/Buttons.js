@@ -1,12 +1,12 @@
 var Buttons = {
 
-	startButton: document.getElementById('startButtonId'),
-	dampButton: document.getElementById('dampButtonId'),
-	tearButton: document.getElementById('tearButtonId'),
-	tearVisibleButton: document.getElementById('tearVisibleButtonId'),
-	// cubeVisibleButton: document.getElementById('cubeVisibleButtonId'),
-	cameraButton: document.getElementById('cameraButtonId'),
-	// wireframeButton: document.getElementById('wireframeButtonId'),
+	startButton: document.getElementById('startId'),
+	dampInput: document.getElementById('dampId'),
+	tearInput: document.getElementById('tearId'),
+	tearVisibleInput: document.getElementById('tearVisibleId'),
+	cubeVisibleInput: document.getElementById('cubeVisibleId'),
+	cameraButton: document.getElementById('cameraId'),
+	wireframeInput: document.getElementById('wireframeId'),
 
 	// planeLevelBox: document.getElementById('planeLevelInputId'),
 	// cubeWidthBox: document.getElementById('cubeWidthInputId'),
@@ -15,16 +15,25 @@ var Buttons = {
 
 	allElements: null,
 
-	registerButtonsAndForms(){
-		Buttons.dampButton.onclick = function() {CONF.dampingOff = !CONF.dampingOff;};
-		Buttons.startButton.onclick = function() {paused = !paused;}
-		Buttons.tearButton.onclick = function() {CONF.tearable = !CONF.tearable;}
-		Buttons.tearVisibleButton.onclick = function() {CONF.tornFacesVisible = !CONF.tornFacesVisible;}
-		// Buttons.cubeVisibleButton.onclick = function() {CONF.cubeVisible = !CONF.cubeVisible;}
-		Buttons.cameraButton.onclick = function() {Update.toggleCamera();}
-		// Buttons.wireframeButton.onclick = function() {Update.toggleCamera();}
+	registerPageInputs(){
+		Buttons.startButton.onclick = function() {paused = !paused;};
+		Buttons.dampInput.onclick = function() {CONF.dampingOn = this.checked;};
+		Buttons.tearInput.onclick = function() {CONF.tearable = this.checked;};
+		Buttons.tearVisibleInput.onclick = function() {CONF.tornFacesVisible = this.checked;};
+		Buttons.cubeVisibleInput.onclick = function() {CONF.cubeVisible = this.checked; Update.toggleObjectVisibility(this.checked);};
+		Buttons.cameraButton.onclick = function() {Update.toggleCamera();};
+		Buttons.wireframeInput.onclick = function() {CONF.showWireframe = this.checked; Update.toggleWireframe(this.checked);};
+
+		Buttons.initialize();
 
 		Buttons.allElements = [Buttons.startButton, Buttons.dampButton];
+	},
+
+	initialize(){
+		Buttons.dampInput.checked = CONF.dampingOn;
+		Buttons.tearInput.checked = CONF.tearable;
+		Buttons.tearVisibleInput.checked = CONF.tornFacesVisible;
+		Buttons.cubeVisibleInput.checked = CONF.cubeVisible;
 	},
 
 	disable(element){

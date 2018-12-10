@@ -25,7 +25,7 @@ var Update = {
 					p2dampen = p2.velocity.clone().multiplyScalar(CONF.dampConstant);
 
 				// Set damping to zero if disabled
-				if(CONF.dampingOff){
+				if(!CONF.dampingOn){
 					p1dampen.set(0,0,0);
 					p2dampen.set(0,0,0);
 				}
@@ -39,7 +39,7 @@ var Update = {
 			}
 			else if(((s.ripped) || (s.rip && !CONF.tornFacesVisible))){
 				for (let i = 0; i < s.faceInds.length; i++){
-					Update.toggleFaceVisibility(s.faceInds[i]);
+					Update.toggleFaceVisibility(s.faceInds[i], false);
 				}
 			}// else do nothingif(!s.ripped)
 			
@@ -100,16 +100,51 @@ var Update = {
 		}
 	},
 
-	toggleFaceVisibility(faceIndex){
+	toggleFaceVisibility(faceIndex, visible){
 		let face = planeGeometry.faces[faceIndex];
 
 		//Change index of active material. Materials set in Main.initGeometry
-		if(face.materialIndex === 0)
+		if(!visible)
 			face.materialIndex = 1;
-		//else
-		//	face.materialIndex = 0;
+		else if(visible && !CONF.showWireframe)
+			face.materialIndex = 0;
+		else if(visible && CONF.showWireframe)
+			face.materialIndex = 2;
+		else
+			throw "Unknown state in toggleFaceVisibility";
 
 		planeGeometry.groupsNeedUpdate = true;
+	},
+
+	toggleWireframe(wireframeOn){
+
+		for(let face of planeGeometry.faces){
+			// Skip if face is invisible
+			if(face.materialIndex === 1)
+				continue;
+
+			if(wireframeOn)
+				face.materialIndex = 2;
+			else
+				face.materialIndex = 0;
+		}
+
+		planeGeometry.groupsNeedUpdate = true;
+	},
+
+	toggleObjectVisibility(visible){
+		//Index of material in mesh to switch to. Materials set in Main.initCubeObject
+		let newMaterialIndex = 0;
+
+		//If switching to invisible, switch to transparent material
+		if(!visible)
+			newMaterialIndex = 1;
+
+		for(let face of objectGeometry.faces){
+			face.materialIndex = newMaterialIndex;
+		}
+
+		objectGeometry.groupsNeedUpdate = true;
 	},
 
 	setCamera(cameraPosObject){

@@ -17,6 +17,11 @@
 	height: 80%;
 }
 
+.ConfOption{
+	display: block;
+	margin: 10px;
+}
+
 #container::after { 
   content: "";
   display: block; 

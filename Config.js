@@ -8,7 +8,7 @@ var CONF = {
 	//Physics
 	//
 	timeStep: 0.01, //time that passes each frame of animation. Used to update particle positions
-	dampingOff: false, //true to disable damping of spring energy	######################################
+	dampingOn: true, //false to disable damping of spring energy
 	dampConstant: .75, //how heavily to damp spring energy
 	springConstant: 1.25,
 	pixelsPerMeter: 50,

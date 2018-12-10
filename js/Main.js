@@ -38,7 +38,7 @@ var bottomCameraView = {
 	position: new THREE.Vector3(0, 0.5, -75)
 };
 
-Buttons.registerButtonsAndForms();
+Buttons.registerPageInputs();
 initPlane();
 initScene();
 animate();
@@ -234,17 +234,19 @@ function initScene() {
 function initGeometry(){
 
 	let planeMaterial = new THREE.MeshPhongMaterial( {
-		color: 0xff80ff, flatShading: true, wireframe: CONF.showWireframe
+		color: 0xff80ff, flatShading: true
 	} );
 
 	let transparentMaterial = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0 } );
-	// let planeWireframeMaterial = new THREE.MeshPhongMaterial( {
-	// 	color: 0xff80ff, flatShading: true, wireframe: true
-	// } );
 	
-	let materials = [planeMaterial, transparentMaterial];
+	let wireframeMaterial = new THREE.MeshPhongMaterial( {
+		color: 0xff80ff, flatShading: true, wireframe: true
+	} );
+	
+	let materials = [planeMaterial, transparentMaterial, wireframeMaterial];
 
 	planeMaterial.side = THREE.DoubleSide;
+	wireframeMaterial.side = THREE.DoubleSide;
 
 	var planeMesh = new THREE.Mesh( planeGeometry, materials );
 	planeMesh.position = new THREE.Vector3(0,0,0);
@@ -252,7 +254,8 @@ function initGeometry(){
 	planeMesh.matrixAutoUpdate = false;
 	scene.add( planeMesh );
 
-
+	// Ensure all material indices are correct
+	Update.toggleWireframe(false);
 }
 
 function initCubeObject(){
@@ -277,12 +280,15 @@ function initCubeObject(){
 
 	// Now, initialize cube object in scene
 	var objectMaterial = new THREE.MeshPhongMaterial( {
-		color: 0x000000, flatShading: true, visible: CONF.cubeVisible
+		color: 0x000000, flatShading: true
 	});
+	let transparentMaterial = new THREE.MeshBasicMaterial( { transparent: true, opacity: 0 } );
+	let materials = [objectMaterial, transparentMaterial];
 
 	let geometry = new THREE.BoxGeometry(CONF.cubeWidth,CONF.cubeWidth,CONF.cubeWidth);
 	geometry.translate(cubeTranslation.x,cubeTranslation.y,cubeTranslation.z);
-	var objectMesh = new THREE.Mesh(geometry, objectMaterial);
+
+	var objectMesh = new THREE.Mesh(geometry, materials);
 	scene.add(objectMesh);
 
 	// set globals
@@ -290,6 +296,9 @@ function initCubeObject(){
 	objectBoundingBox = boundingBox;
 	objectSideFaces = [leftF,backF,rightF,frontF,bottomF];
 	objectBottom = bottomF;
+
+	// Lastly, set visibility now that global is set
+	Update.toggleObjectVisibility(CONF.cubeVisible);
 }
 
 function onWindowResize() {

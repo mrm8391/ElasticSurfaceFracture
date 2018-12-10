@@ -17,13 +17,13 @@
           An alternative text describing what your canvas displays. 
         </canvas>
         <div id="confControls">
-            <button id="startButtonId">Play/Pause</button>
-            <button id="dampButtonId">Toggle damping</button>
-            <button id="tearButtonId">Toggle tearing</button>
-            <button id="tearVisibleButtonId">Toggle tear visibility</button>
-            <!-- <button id="cubeVisibleButtonId">Toggle cube visibility</button> -->
-            <button id="cameraButtonId">Camera toggle</button>
-            <!-- <button id="wireframeButtonId">Wireframe toggle</button> -->
+            <button class="ConfOption" id="startId">Play/Pause</button>
+            <label class="ConfOption">Damping enabled: <input id="dampId" type="checkbox"></label>
+            <label class="ConfOption">Material tearing enabled: <input id="tearId" type="checkbox"></label>
+            <label class="ConfOption">Tearing visibility enabled: <input id="tearVisibleId" type="checkbox"></label>
+            <label class="ConfOption">Cube visible: <input id="cubeVisibleId" type="checkbox"></label>
+            <button class="ConfOption" id="cameraId">Camera toggle</button>
+            <label class="ConfOption">Plane wireframe visible: <input id="wireframeId" type="checkbox"></label>
             <!-- <label for="planeLevelInput">Density of plane tesselation:</label>
             <input type="text" id="planeLevelInputId" name="planeLevelInput" placeholder="20">
             <label for="cubeWidthInput">Width of cube object:</label>
