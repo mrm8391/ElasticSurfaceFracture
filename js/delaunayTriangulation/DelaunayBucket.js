@@ -7,9 +7,13 @@ class DelaunayBucket{
     /** 
      * Constructor of a delaunay bucket
      * 
-     * @param a this is the new point that is being introduced to the triangulation
-     * @param b one of the points already in the DT
-     * @param c one of the points already in the DT
+     * @param a this is the new point that is being introduced to the triangulation. 
+     * This is in the form of its index from the overall allSites list.
+     * @param b one of the points already in the DT. 
+     * This is in the form of its index from the overall allSites list.
+     * @param c one of the points already in the DT. 
+     * This is in the form of its index from the overall allSites list.
+     * @param index this is the index of the triangle in allTriangles.
      */
     constructor(a, b, c, index){
         if (Utils.determinant(a,b,c) <= 0){
@@ -21,8 +25,7 @@ class DelaunayBucket{
         this.b = b;
         this.c = c;
         this.id = index;
-
-        
+        this.firstHedge = null;
     }
 
     addPoint(p){
@@ -30,45 +33,66 @@ class DelaunayBucket{
     }
 
     assignHalfEdges(){
-        //Create the halfedges for this face
-        this.firstHedge = new DelaunayHedge(a, b);
-        this.firstHedge.setTwins();
+        //Create the halfedges for this face.
+        
 
-        let hashBC = Utils.cantorHash(b,c);
-        let hashCA = Utils.cantorHash(c,a);
+        let hashAB = Utils.cantorHash(this.a,this.b);
+        let hashBC = Utils.cantorHash(this.b,this.c);
+        let hashCA = Utils.cantorHash(this.c,this.a);
 
-        let bc = -9999;
-        let ca = -9999;
+        let bc = null;
+        let ca = null;
+
+        if(!DelTriangulation.allEdges.has(hashAB)){
+            this.firstHedge = new DelaunayHedge(this.a, this.b);
+            this.firstHedge.setTwins();
+            DelTriangulation.allEdges.set(hashAB, [this.firstHedge, 
+                this.firstHedge.twin]);
+        }
+        else{
+            let abEdge = DelTriangulation.allEdges.get(hashAB);
+            if(abEdge[0].origin === this.a){
+                this.firstHedge = abEdge[0];
+            }
+            else{
+                this.firstHedge = abEdge[1];
+            }
+        }
+        this.firstHedge.setIncidentFace(this.id);
+
 
         if(!DelTriangulation.allEdges.has(hashBC)){
-        bc = new DelaunayHedge(b, c);
-        bc.setTwins();
-        bc.setIncidentFace(this.id);
+            bc = new DelaunayHedge(this.b, this.c);
+            bc.setTwins();
+            DelTriangulation.allEdges.set(hashBC, [bc, bc.twin]);
         }
         else{
             let bcEdge = DelTriangulation.allEdges.get(hashBC);
-            if (bcEdge[0] === b){
+            if (bcEdge[0].origin === this.b){
                 bc = bcEdge[0];
             }
             else{
                 bc = bcEdge[1];
             }
         }
+        bc.setIncidentFace(this.id);
+
 
         if(!DelTriangulation.allEdges.has(hashCA)){
-            ca = new DelaunayHedge(c, a);
+            ca = new DelaunayHedge(this.c, this.a);
             ca.setTwins();
-            ca.setIncidentFace(this.id);
+            DelTriangulation.allEdges.set(hashBC, [ca, ca.twin]);
+        }
+        else{
+            let caEdge = DelTriangulation.allEdges.get(hashCA);
+            if (caEdge[0].origin === this.c){
+                ca = caEdge[0];
             }
             else{
-                caEdge = DelTriangulation.allEdges.get(hashCA);
-                if (caEdge[0] === b){
-                    ca = caEdge[0];
-                }
-                else{
-                    ca = caEdge[1];
-                }
+                ca = caEdge[1];
             }
+        }
+        ca.setIncidentFace(this.id);
 
 
         this.firstHedge.setNext(bc);

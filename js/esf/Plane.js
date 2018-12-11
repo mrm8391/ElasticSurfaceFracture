@@ -98,7 +98,7 @@ var Plane = {
 		return plane;
 	},
 
-	/*
+	/**
 	Custom plane tessellation that creates boxes with an X pattern.
 	The X within each box forms the triangles, causing all verticies
 	to share an edge with each of its 8 nearest neighbors.
@@ -125,29 +125,14 @@ var Plane = {
 				(Math.random() * (-boxStart - boxStart) + boxStart)
 				]
 			);
-		}/**/
+		}
 
 		//Add points along the edges of the bounding square, to lock
 		//in the edges
 		points.push(
-			//A little offset to avoid cocircular points
 			[boxStart, boxStart],
-			//[boxStart, boxStart/2],
-			//[boxStart, 0],
-			//[boxStart, -boxStart/2],
-
 			[-boxStart, boxStart],
-			//[boxStart/2, -boxStart],
-			//[0, -boxStart],
-			//[-boxStart/2, -boxStart],
-
-			
-
 			[-boxStart, -boxStart],
-			//[-boxStart, boxStart/2],
-			//[-boxStart, 0],
-			//[-boxStart, -boxStart/2],
-
 			[-boxStart, boxStart]);
 			//[boxStart/2, boxStart],
 			//[0, boxStart],
@@ -214,22 +199,12 @@ var Plane = {
 		let vertices = plane.vertices;
 		let faces = plane.faces;
 
-		/*for(let i = 0; i < points.length; i++){
-			let pt = new THREE.Vector3(
-				points[i][0],
-				points[i][1],
-				points[i][2]
-			);
-			vertices.push(pt);
-		}*/
+		/*DelTriangulation.reset();
+
+		let triangs = DelTriangulation.triangulate(points);*/
+
 		let delaunay = Delaunator.from(points);
 		let triangs = delaunay.triangles;
-		/*for(let i = 0; i < points.length; i+=2){
-			//Convert to 3D vertices
-			let vert = new THREE.Vector3(points[i][], points[i+1],0);
-
-			vertices.push(vert);
-		}*/
 
 		// Add the triangles from the generated delaunay triangulation
 		// to faces
@@ -237,14 +212,9 @@ var Plane = {
 		let vertIndex = 0;
 		for(let i = 0; i < triangs.length; i+=3){
 			//2D versions
-			let tPt0 = points[triangs[i]];
-			let tPt1 = points[triangs[i+1]];
-			let tPt2 = points[triangs[i+2]];
-
-			/*//3D versions
-			let v0 = new THREE.Vector3(tPt0[0], tPt0[1], 0);
-			let v1 = new THREE.Vector3(tPt1[0], tPt1[1], 0);
-			let v2 = new THREE.Vector3(tPt2[0], tPt2[1], 0);*/
+			let tPt0 = triangs[i];
+			let tPt1 = triangs[i+1];
+			let tPt2 = triangs[i+2];
 			
 			// Cantor hashes of the x and y coordinates for each vertex
 			let hash0 = Utils.cantorHash(tPt0[0] + width + 1 - boxStart, tPt0[1] - boxStart) - boxStart + 1,

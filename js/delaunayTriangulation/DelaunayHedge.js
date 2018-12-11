@@ -9,7 +9,7 @@ class DelaunayHedge{
     }
 
     setTwins(){
-        this.twin = new DelaunayHedge(b, a);
+        this.twin = new DelaunayHedge(this.end, this.origin);
         this.twin.twin = this;
     }
 
