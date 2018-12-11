@@ -32,3 +32,25 @@ https://stackoverflow.com/a/38437831
 ThreeJS Memory Disposal
 Created by multiple users in a collaborative effort
 https://stackoverflow.com/questions/33152132/three-js-collada-whats-the-proper-way-to-dispose-and-release-memory-garbag/33199591#33199591
+
+Delaunator: This is a placeholder for generating a Delaunay Triangulation until we can get our own implementation stable and working.
+Created by a private company called Mapbox
+https://github.com/mapbox/delaunator
+
+Conceptual Resources:
+
+(Class Notes)
+Mount, David M., Pless, Robert. "Delaunay Triangulation." Computational Geometry. University of Maryland, College Park, MD. 2012.
+
+(More on Delaunay Triangulation edge cases)
+https://www.ti.inf.ethz.ch/ew/Lehre/CG13/lecture/Chapter%206.pdf
+
+(4x4 determinants)
+Weston, Harley. "4 by 4 determinants." Math Central: Quandries & Queries. University of Regina. http://mathcentral.uregina.ca/QQ/database/QQ.09.07/h/rav1.html
+
+(3x3 determinants)
+https://www.youtube.com/watch?v=mEeHxKH46O0
+
+(For Doubly Connected Edge List information)
+de Berg M., van Kreveld M., Overmars M., Schwarzkopf O.C. Computational Geometry: Algorithms and Applications, Ed. 2. Springer, Berlin, Heidelberg. http://www.cs.sfu.ca/~binay/813.2011/DCEL.pdf
+
