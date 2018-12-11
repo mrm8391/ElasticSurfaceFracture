@@ -1,0 +1,27 @@
+.list-group{
+    display:inline-block;
+}
+
+#algorithms { 
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+
+#simulation {
+    background-image: linear-gradient(white,rosybrown);
+}
+
+#resources {
+    background-color: rebeccapurple;
+}
+
+header.masthead {
+    padding-top: 7rem;
+    padding-bottom: calc(10rem - 56px);
+    background-image: url("../img/header.jpg");
+    background-position: center center;
+    background-size: cover;
+    height: auto;
+    padding-top: 100px;
+    padding-bottom: 50px;
+}

@@ -223,9 +223,10 @@ function initScene() {
 	// renderer
 
 	// placeholder for side by side view
-	let threejsCanvas = document.getElementById('canvas');
-	let w = window.getComputedStyle(threejsCanvas, null).width;
-	let h = window.getComputedStyle(threejsCanvas, null).height;
+	let threejsCanvas = document.getElementById('simulationCanvas');
+	let canvasParent = document.getElementById('simulationParent');
+	let w = window.getComputedStyle(canvasParent, null).width;
+	let h = window.getComputedStyle(canvasParent, null).height;
 	threejsCanvas.setAttribute('width', w);
 	threejsCanvas.setAttribute('height', h);
 
@@ -250,7 +251,7 @@ function initScene() {
 	controls.keys = [ 65, 83, 68 ];
 	controls.addEventListener( 'change', render );
 	
-	window.addEventListener( 'resize', onWindowResize, false );
+	window.addEventListener( 'resize', updateCanvasSize, false );
 
 	initGeometry();
 	initCubeObject(10, 20);
@@ -329,10 +330,17 @@ function initCubeObject(){
 	Update.toggleObjectVisibility(CONF.cubeVisible);
 }
 
-function onWindowResize() {
-	camera.aspect = window.innerWidth / window.innerHeight;
+function updateCanvasSize() {
+	let threejsCanvas = document.getElementById('simulationCanvas');
+	let canvasParent = document.getElementById('simulationParent');
+	let w = window.getComputedStyle(canvasParent, null).width;
+	let h = window.getComputedStyle(canvasParent, null).height;
+	threejsCanvas.setAttribute('width', w);
+	threejsCanvas.setAttribute('height', h);
+	
+	camera.aspect = parseInt(w,10) / parseInt(h,10);
 	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
+	renderer.setSize( parseInt(w,10), parseInt(h,10));
 	controls.handleResize();
 	//render();
 }

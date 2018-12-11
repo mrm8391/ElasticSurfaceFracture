@@ -31,21 +31,6 @@ var Utils = {
 	},
 
 	/*
-	Recursive utility function for disposing of threejs resources in a scene.
-
-	Credit goes to https://stackoverflow.com/a/48768960
-	*/
-	clearThree(obj) {
-		while (obj.children.length > 0) {
-			Utils.clearThree(obj.children[0])
-			obj.remove(obj.children[0]);
-		}
-		if (obj.geometry) obj.geometry.dispose()
-		if (obj.material) obj.material.dispose()
-		if (obj.texture) obj.texture.dispose()
-	},
-
-	/*
 	Utility function for disposing of threejs resources in a scene.
 
 	Function is a collaborative effort from several users on this post:

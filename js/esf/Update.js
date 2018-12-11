@@ -148,7 +148,7 @@ var Update = {
 	},
 
 	setCamera(cameraPosObject){
-		camera.up = cameraPosObject.up;
+		camera.up = cameraPosObject.up.clone();
 		camera.position.x = cameraPosObject.position.x;
 		camera.position.y = cameraPosObject.position.y;
 		camera.position.z = cameraPosObject.position.z;
