@@ -4,6 +4,12 @@ What is this: Webpage containing a Javascript simulation of elastic properties.
 
 Where is this: Simulation files are contained in js/esf. Configuration constants for it are located in Config.js at the root directory.
 
+To reach the main website go to:
+http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/index.html
+
+To run just the simulation, go to:
+http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/minimalSimulation.html
+
 Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Uncheck the pause box to start the physics simulation; you can use the mouse to control a camera in the scene.
 
 Other notes:
