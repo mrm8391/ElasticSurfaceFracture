@@ -1,22 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Creative - Start Bootstrap Theme</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link href="vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/creative.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/liststyle.css">
     <link href="css/esf.css" rel="stylesheet">
-    <title>Document</title>
-</head>
-<body>
 
-    <h1>Elastic Surface Fracture Demonstration</h1>
+  </head>
 
-    <!-- Can't get a side by side view going yet, css sucks -->
-    <div id="container">
-        <canvas id="canvas">
-          An alternative text describing what your canvas displays. 
-        </canvas>
-        <div id="confControls">
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+      <div class="container">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">Computational Geometry Final</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#">Maximillian</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#">Tristan</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="masthead text-center text-white d-flex">
+      <div class="container my-auto ml-1">
+        <div class="row">
+          <div class="col-lg-10 mx-auto">
+            <h1 class="text-uppercase">
+              <strong>Elastic Surface Fracture</strong>
+            </h1>
+            <h3>By Maximillian McMullen and Tristan Manning</h2>
+            <hr>
+          </div>
+          <div class="col-lg-8 mx-auto">
+            <p class="text-faded mb-5">
+              The goal of this project is to simulate the stretchy properties of rubber. A simple object is pressed into a rubber sheet, with the sheet conforming, and eventually tearing from the strain.
+              </p>
+          </div>
+          <div class="col-lg-8 mx-auto">
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#algorithms">Project Details</a>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#simulation">Skip to the cool stuff!</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="" id="algorithms">
+      <div class="container mr-1">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-dark">Project Overview</h2>
+            <hr class="dark my-4">
+            <p class="text-faded text-dark mb-4">
+                Discuss basics of project physics and algorithms here
+
+                Bullet poitns to cover:
+                -Background information about the problem.
+                -What are your specific inputs and outputs (show a visualization, if possible).
+                -What are the needs for the problem domain -- is it important that you find the optimal solution? why or why not?
+                -Describe your algorithm and show example results.
+                -Give a complexity analysis of your algorithm, and also show measured running time for different sizes of inputs
+                </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container ml-1">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-dark">Existing Work</h2>
+            <hr class="dark my-4">
+            <p class="text-faded text-dark mb-4">
+                Discuss related projects here, maybe some spring-mesh demos or collision detection.
+                Bullet points to cover:
+                -Are there related projects by others that tackle the same problem. How?
+                
+                </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="simulation">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <h2 class="section-heading">Simulation</h2>
+            <hr class="my-4">
+          </div>
+
+          <div class="col-lg-9" id="simulationParent">
+            <canvas id="simulationCanvas">
+              An alternative text describing what your canvas displays. 
+            </canvas>
+         </div>
+          
+          <div class="col-lg-3 text-center" id="confControls">
             <button class="ConfOption" id="initializeId">Initialize/Reset</button>
             
             <label class="ConfOption">Paused: <input id="pauseId" type="checkbox"></label>
@@ -27,31 +135,61 @@
             <button class="ConfOption" id="cameraId">Camera toggle</button>
             <label class="ConfOption">Plane wireframe visible: <input id="wireframeId" type="checkbox"></label>
             
-            <h2>Geometry related constants (changes apply on simulation reset/initialization)</h2>
+            <p><b>Geometry related constants (changes apply on simulation reset/initialization)</b></p>
             <label class="ConfOption">Density of plane tesselation: <input type="text" id="planeLevelId"></label>
             <label class="ConfOption">Object descend rate: <input type="text" id="objectDescendId"></label>
             <label class="ConfOption">Width of cube object: <input type="text" id="cubeWidthId"></label>
             <label class="ConfOption">Object stop point (z-axis): <input type="text" id="stopPointId"></label>
             <label class="ConfOption">Max stretch factor for springs: <input type="text" id="maxStretchId"></label>
         </div>
-    </div>
+        </div>
+      </div>
+    </section>
 
-    <!-- Extremely complex html -->
-    
-	<!-- Libraries -->
+    <section class="" id="resources">
+      <div class="simContainer">
+        <div class="row">
+          <div class="col-lg-8 mx-auto text-center">
+            <h2 class="section-heading text-white">Resources (cite sources, used code, and related links)</h2>
+            <hr class="light my-4">
+            
+            <div id="sourcelist">
+              <ol>
+                  <!-- <li><p><a href="https://www.ti.inf.ethz.ch/ew/lehre/CG12/lecture/Chapter%2010.pdf">Voronoi Diagrams</a></p></li>
+                  <li><p><a href="https://research.engineering.wustl.edu/~pless/506/l17.html">Delaunay Triangulation</a></p></li>
+                  <li><p><a href="https://www.joesfer.com/?p=60">Voronoi Shattering</a></p></li>
+                  <li><p><a href="https://www.joesfer.com/?p=69">Voronoi Shattering 2</a></p></li>
+                  <li><p><a href="https://www.sciencedirect.com/science/article/pii/S0097849312000350">3D Convex Hulls</a></p></li> -->
+                  <li><p><a href="http://www.freepik.com">Cover image at top of page designed by Freepik (used with license)</a></p></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Libraries for Bootstrap Creative theme -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="vendor/scrollreveal/scrollreveal.min.js"></script>
+    <script src="vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="js/creative.min.js"></script>
+
+    <!-- Libraries for Elastic Surface Fracture -->
     <script src="js/libraries/three.min.js"></script>
     <script src="js/libraries/TrackballControls.js"></script>
     <script src="js/libraries/WebGL.js"></script>
     <script src="https://unpkg.com/mathjs@5.3.1/dist/math.js"></script>
+    <script src="https://unpkg.com/delaunator@3.0.2/delaunator.js"></script> 
 
-	<!-- Code -->
+  <!-- Elastic Surface Fracture code -->
     <script src="Config.js"></script>
     <script src="js/esf/Buttons.js"></script>
     <script src="js/delaunayTriangulation/DelaunayUtils.js"></script>
     <script src="js/delaunayTriangulation/DelaunayHedge.js"></script>
     <script src="js/delaunayTriangulation/DelaunayBucket.js"></script>
     <script src="js/delaunayTriangulation/DelTriangulation.js"></script>
-    <script src="https://unpkg.com/delaunator@3.0.2/delaunator.js"></script>
     <script src="js/esf/EdgeVerts.js"></script>
     <script src="js/esf/Utilities.js"></script>
     <script src="js/esf/Plane.js"></script>
@@ -60,6 +198,6 @@
     <script src="js/esf/Update.js"></script>
     <script src="js/esf/Main.js"></script>
 
-</body>
-</html>
+  </body>
 
+</html>
