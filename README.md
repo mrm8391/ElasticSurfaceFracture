@@ -12,7 +12,7 @@ https://mrm8391.github.io/minimalSimulation
 
 Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Check the pause box to stop the physics simulation at any time; you can use the mouse to control a camera in the scene (even when paused). Click Initialize once again to apply geometry related constants that can only apply on reload.
 
-Code Tour:
+Code Tour:  
 Config.js - Runtime constants  
 Main.js - Initialize and start simulation  
 Buttons.js - Inputs on page tied to triggers for the simulation. The Init button in this triggers the start of the animation  
