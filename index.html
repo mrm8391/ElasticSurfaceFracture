@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Creative - Start Bootstrap Theme</title>
+    <title>Elastic Surface Fracture</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -111,10 +111,11 @@
             <h2 class="section-heading text-dark">Existing Work</h2>
             <hr class="dark my-4">
             <p class="text-faded text-dark mb-4">
-                Discuss related projects here, maybe some spring-mesh demos or collision detection.
-                Bullet points to cover:
-                -Are there related projects by others that tackle the same problem. How?
-                
+                The spring-mass-damper model is used to represent the elastic properties of the plane. This is commonly used in animations to replicate cloth physics. <a href="https://www.khanacademy.org/partner-content/pixar/simulation/hair-simulation-code/v/particles">Pixar has an online course detailing how this is done.</a> 
+ 
+              There are other ways of modeling non-linearly elastic properties as well; <a href="https://graphics.stanford.edu/~mdfisher/cloth.html">this site discusses several different ways of implementing them.</a> 
+ 
+              Lastly, while we use simplified collision detection, realistic object collision and deformation can be modeled with the recently developed <a href="https://www.youtube.com/watch?v=No3daypHoa4">BD-Trees</a>. 
                 </p>
           </div>
         </div>
@@ -131,7 +132,7 @@
 
           <div class="col-lg-9" id="simulationParent">
             <canvas id="simulationCanvas">
-              An alternative text describing what your canvas displays. 
+              Elastic Surface Fracture Simulation
             </canvas>
          </div>
           
