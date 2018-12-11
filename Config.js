@@ -16,7 +16,7 @@ var CONF = {
 	//
 	//Plane and object properties
 	//
-	planeLevels: 2, //How many levels the plane is tesselated to
+	planeLevels: 50, //How many levels the plane is tesselated to
 	planeWidth: 50, //width of the plane in pixels
 	objectDescendRate: .125, //speed, in pixels, that the object descends
 	objectStopPoint: -50, //Where to stop object movement. null indicates no stop

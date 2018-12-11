@@ -212,9 +212,9 @@ var Plane = {
 		let vertIndex = 0;
 		for(let i = 0; i < triangs.length; i+=3){
 			//2D versions
-			let tPt0 = triangs[i];
-			let tPt1 = triangs[i+1];
-			let tPt2 = triangs[i+2];
+			let tPt0 = points[triangs[i]];
+			let tPt1 = points[triangs[i+1]];
+			let tPt2 = points[triangs[i+2]];
 			
 			// Cantor hashes of the x and y coordinates for each vertex
 			let hash0 = Utils.cantorHash(tPt0[0] + width + 1 - boxStart, tPt0[1] - boxStart) - boxStart + 1,

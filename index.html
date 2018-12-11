@@ -83,7 +83,18 @@
             <p class="text-faded text-dark mb-4">
                 Discuss basics of project physics and algorithms here
 
-                Bullet poitns to cover:
+                With elastic surfaces, when an object pushes into it, that surface stretches out and conforms to the shape 
+                of the object. If the object keeps pushing into the surface, the surface will eventually begin to rip. 
+                The surface physics can be simplified to a mesh of spring mass pairs. To tear the surface, springs that reach 
+                their respective maximum lengths are removed from the particles' force dependencies. 
+                With a perfect grid mesh, these springs will rip in a relatively square pattern, which looks quite unrealistic. 
+                This gives motivation to use a less uniform pattern for the mesh, i.e. a Delaunay Triangulation.
+
+                Inputs:
+                The user of this simulation can experiment with different parameters. For the Delaunay Triangulation itself, 
+                the user may adjust the density of the plane tessellation. In other words, the higher the number, the more points 
+                that will be triangulated. This is set to a default 50.
+                Bullet points to cover:
                 -Background information about the problem.
                 -What are your specific inputs and outputs (show a visualization, if possible).
                 -What are the needs for the problem domain -- is it important that you find the optimal solution? why or why not?
