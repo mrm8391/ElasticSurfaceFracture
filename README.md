@@ -5,24 +5,24 @@ What is this: Webpage containing a Javascript simulation of elastic properties.
 Where is this: Simulation files are contained in js/esf. Configuration constants for it are located in Config.js at the root directory.
 
 To reach the main website, clone git repo and open index.html (better looking) or click on:
-http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/index.html
+https://mrm8391.github.io/
 
 To run just the simulation, clone the git repo and open minimalSimulation.html or click on:
-http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/minimalSimulation.html
+https://mrm8391.github.io/minimalSimulation
 
-Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Uncheck the pause box to start the physics simulation; you can use the mouse to control a camera in the scene. Click Initialize once again to apply geometry related constants.
+Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Check the pause box to stop the physics simulation at any time; you can use the mouse to control a camera in the scene (even when paused). Click Initialize once again to apply geometry related constants that can only apply on reload.
 
 Code Tour:
-Config.js - Runtime constants
-Main.js - Initialize and start simulation
-Buttons.js - Inputs on page tied to triggers for the simulation. The Init button in this triggers the start of the animation
-Corner.js - Unused code to handle corner collisions. No need to look at or grade this, it's there for potential future work
-EdgeVerts.js and FractureMaintenance.js - Helpers for fracture functionality
-Particle.js - Particle object that wraps a threejs point. Used for physics
-Plane.js - Plane tesselation and helpers. This is where delaunay triangulation is used
-Spring.js - Spring object that wraps an edge. Used for physics
-Update.js - Physics and movement that gets updated at each render frame
-Utilities.js - Misc. utility functions
+Config.js - Runtime constants  
+Main.js - Initialize and start simulation  
+Buttons.js - Inputs on page tied to triggers for the simulation. The Init button in this triggers the start of the animation  
+Corner.js - Unused code to handle corner collisions. No need to look at or grade this, it's there for potential future work  
+EdgeVerts.js and FractureMaintenance.js - Helpers for fracture functionality  
+Particle.js - Particle object that wraps a threejs point. Used for physics  
+Plane.js - Plane tesselation and helpers. This is where delaunay triangulation is used  
+Spring.js - Spring object that wraps an edge. Used for physics  
+Update.js - Physics and movement that gets updated at each render frame  
+Utilities.js - Misc. utility functions  
 
 Other notes:
 Unfortunately, Delaunay Triangulation could not be finished before the project deadline. A partial implementation is located in js/esf/delaunayTriangulation, but a library is used in-place of this functionality (in Plane.js) in the interest of a working project.
