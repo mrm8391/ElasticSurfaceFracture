@@ -4,10 +4,10 @@ What is this: Webpage containing a Javascript simulation of elastic properties.
 
 Where is this: Simulation files are contained in js/esf. Configuration constants for it are located in Config.js at the root directory.
 
-To reach the main website go to:
+To reach the main website, clone git repo and open index.html (better looking) or click on:
 http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/index.html
 
-To run just the simulation, go to:
+To run just the simulation, clone the git repo and open minimalSimulation.html or click on:
 http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/minimalSimulation.html
 
 Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Uncheck the pause box to start the physics simulation; you can use the mouse to control a camera in the scene.
@@ -16,6 +16,7 @@ Other notes:
 Admittedly, the website portion of this is in need of cleaning up. The Javascript and CSS libraries also need to be refactored
 to use a package manager. Due to time constraints as college students, the libraries are bundled within the repository for now. However,
 both me and my collaborator intend on touching this up once the semester comes to a close.
+Our Delaunay Triangulation is partially done, and can be located in the delaunayTriangulation folder. To show results of the rest of the project however, we are using a borrowed Delaunator from Mapbox as a placeholder.
 
 Library and resource credit:
 
