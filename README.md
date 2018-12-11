@@ -10,13 +10,26 @@ http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/
 To run just the simulation, clone the git repo and open minimalSimulation.html or click on:
 http://htmlpreview.github.io/?https://github.com/mrm8391/ElasticSurfaceFracture/blob/master/minimalSimulation.html
 
-Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Uncheck the pause box to start the physics simulation; you can use the mouse to control a camera in the scene.
+Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Uncheck the pause box to start the physics simulation; you can use the mouse to control a camera in the scene. Click Initialize once again to apply geometry related constants.
+
+Code Tour:
+Config.js - Runtime constants
+Main.js - Initialize and start simulation
+Buttons.js - Inputs on page tied to triggers for the simulation. The Init button in this triggers the start of the animation
+Corner.js - Unused code to handle corner collisions. No need to look at or grade this, it's there for potential future work
+EdgeVerts.js and FractureMaintenance.js - Helpers for fracture functionality
+Particle.js - Particle object that wraps a threejs point. Used for physics
+Plane.js - Plane tesselation and helpers. This is where delaunay triangulation is used
+Spring.js - Spring object that wraps an edge. Used for physics
+Update.js - Physics and movement that gets updated at each render frame
+Utilities.js - Misc. utility functions
 
 Other notes:
-Admittedly, the website portion of this is in need of cleaning up. The Javascript and CSS libraries also need to be refactored
-to use a package manager. Due to time constraints as college students, the libraries are bundled within the repository for now. However,
-both me and my collaborator intend on touching this up once the semester comes to a close.
-Our Delaunay Triangulation is partially done, and can be located in the delaunayTriangulation folder. To show results of the rest of the project however, we are using a borrowed Delaunator from Mapbox as a placeholder.
+Unfortunately, Delaunay Triangulation could not be finished before the project deadline. A partial implementation is located in js/esf/delaunayTriangulation, but a library is used in-place of this functionality (in Plane.js) in the interest of a working project.
+
+Also, due to unknown reasons, the simulation is taking a large performance hit (especially with tearing enabled). Smaller tesselation density is recommended to increase performance.
+
+Lastly, the website portion of this is in need of cleaning up. The Javascript and CSS libraries also need to be refactored to use a package manager. Due to time constraints as college students, the libraries are bundled within the repository for now. However, both me and my collaborator intend on touching this up once the semester comes to a close.
 
 Library and resource credit:
 
