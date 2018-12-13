@@ -25,7 +25,7 @@ Update.js - Physics and movement that gets updated at each render frame
 Utilities.js - Misc. utility functions  
 
 Other notes:
-Unfortunately, Delaunay Triangulation could not be finished before the project deadline. A partial implementation is located in js/esf/delaunayTriangulation, but a library is used in-place of this functionality (in Plane.js) in the interest of a working project. To see the results of this, change in the Config.js file the value ourDT from false to true.
+Unfortunately, Delaunay Triangulation could not be finished before the project deadline. A partial implementation is located in js/esf/delaunayTriangulation, but a library is used in-place of this functionality (in Plane.js) in the interest of a working project. To see the results of this, the user may toggle ours vs the delaunator.
 
 Also, due to unknown reasons, the simulation is taking a large performance hit (especially with tearing enabled). Smaller tesselation density is recommended to increase performance.
 
