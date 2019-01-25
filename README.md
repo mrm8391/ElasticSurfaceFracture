@@ -5,10 +5,10 @@ What is this: Webpage containing a Javascript simulation of elastic properties.
 Where is this: Simulation files are contained in js/esf. Configuration constants for it are located in Config.js at the root directory.
 
 To reach the main website, clone git repo and open index.html (better looking) or click on:
-https://mrm8391.github.io/
+https://mrm8391.github.io/esf/
 
 To run just the simulation, clone the git repo and open minimalSimulation.html or click on:
-https://mrm8391.github.io/minimalSimulation
+https://mrm8391.github.io/esf/minimalSimulation
 
 Usage: Scroll down to the simulation section, and click the initialize button. Runtime constants can be modified with the inputs to the right, but some constants can only be modified in Config.js. Check the pause box to stop the physics simulation at any time; you can use the mouse to control a camera in the scene (even when paused). Click Initialize once again to apply geometry related constants that can only apply on reload.
 
